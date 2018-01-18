@@ -49,7 +49,7 @@ public class User implements Serializable {
     private Integer idUser;
     
     
-   //@Size(max = 6)
+    @Size(max = 6)
     @Column(name = "activationToken")
     private Integer activationToken;
     
@@ -147,35 +147,31 @@ public class User implements Serializable {
     @JoinColumn(name = "id_user_profil", referencedColumnName = "id_user_profil")
     @ManyToOne(optional = false)
     private UserProfil idUserProfil;
-    
-    
-    public User(User user) {
-    	
-    		this.idUser = user.idUser;
-		this.activationToken = user.activationToken;
-		this.email = user.email;
-		this.isActive = user.isActive;
-		this.lastconnexion = user.lastconnexion;
-		this.nom = user.nom;
-		this.password = user.password;
-		this.photo = user.photo;
-		this.prenom = user.prenom;
-		this.status = user.status;
-		this.telephone = user.telephone;
-		this.dateNaissance = user.dateNaissance;
-		this.isDakar = user.isDakar;
-		this.pseudo = user.pseudo;
-		this.idUserProfil = user.idUserProfil;
-		
+
+    public User (User user){
+        this.idUser = user.idUser;
+        this.activationToken = user.activationToken;
+        this.email = user.email;
+        this.isActive = user.isActive;
+        this.lastconnexion = user.lastconnexion;
+        this.nom = user.nom;
+        this.password = user.password;
+        this.photo = user.photo;
+        this.prenom = user.prenom;
+        this.status = user.status;
+        this.telephone = user.telephone;
+        this.dateNaissance = user.dateNaissance;
+        this.isDakar = user.isDakar;
+        this.pseudo = user.pseudo;
+        this.idUserProfil = user.getIdUserProfil();
     }
-    
-    /*  
+
     public User(Integer idUser, Integer activationToken, String email, Boolean isActive, String lastconnexion,
 			String nom, String password, String photo, String prenom, String status, String telephone,
 			String dateNaissance, Boolean isDakar, String pseudo, List<Note> noteList, List<UserEvent> userEventList,
 			List<Institution> institutionList, List<Notification> notificationList,
 			List<UsersInterests> usersInterestsList, List<Event> eventList, List<Commentaire> commentaireList
-			,UserProfil idUserProfil
+			// ,UserProfil idUserProfil
 			
     		) {
 		super();
@@ -202,8 +198,6 @@ public class User implements Serializable {
 		this.commentaireList = commentaireList;
 		// this.idUserProfil = idUserProfil;
 	}
-    
-    */
 
     public User() {
     }
@@ -387,7 +381,7 @@ public class User implements Serializable {
         this.commentaireList = commentaireList;
     }
 
-    
+
     public UserProfil getIdUserProfil() {
         return idUserProfil;
     }

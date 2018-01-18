@@ -1,38 +1,31 @@
 package qualshore.livindkr.main.services;
 
-import org.springframework.stereotype.Service;
-
-/*
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import qualshore.livindkr.main.entities.User;
-import qualshore.livindkr.main.models.CustomUserDetails;
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.repository.UserRepository;
-*/
+
+import java.util.Optional;
+
+/**
+ * Created by User on 04/01/2018.
+ */
 
 @Service
-public class CustomUserDetailsService {
-	/*
-	implements UserDetailsService{
-}
-	
-	 @Autowired
-	  private UserRepository userRepository;
-	 
+public class CustomUserDetailsService implements UserDetailsService {
 
-	    @Override
-	    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	        Optional<User> usersOptional = userRepository.findByPseudo(username);
+    @Autowired
+    private UserRepository userRepository;
 
-	        usersOptional.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> usersOptional = userRepository.findByPseudo(username);
 
-	        System.out.print(usersOptional.map(CustomUserDetails::new).get().getUsername());
-	        return usersOptional.map(CustomUserDetails::new).get();
-	    }
-*/
+        usersOptional.orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        return usersOptional.map(CustomUserDetails::new).get();
+    }
 }

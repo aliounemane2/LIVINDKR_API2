@@ -1,11 +1,7 @@
 package qualshore.livindkr.main.configSecurity;
-/*
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,17 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import qualshore.livindkr.main.configSecurity.SecurityConstant;
-import qualshore.livindkr.main.entities.User;
-import qualshore.livindkr.main.models.CustomUserDetails;
-import qualshore.livindkr.main.services.CustomUserDetailsService;
+import qualshore.livindkr.main.entities.CustomUserDetails;
 
-
-*/
-public class JWTAuthenticationFilter {
-
-/*
-extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
 	private AuthenticationManager authenticationManager;
 	
@@ -46,18 +34,16 @@ extends UsernamePasswordAuthenticationFilter {
 	}
 	
 	@Override
-	protected void successfulAuthentication(HttpServletRequest req,
-			HttpServletResponse res, FilterChain chain,
-			Authentication auth) throws IOException, ServletException {
-		
-		String token = Jwts.builder()
-				.setSubject(((CustomUserDetails) auth.getPrincipal()).getPseudo())
-				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME ))
-				.signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRET.getBytes())
-				.compact();
-		res.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX + token);
-		res.sendRedirect("/welcome");
+	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
+		CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
+        if(details.getIsActive() == false){
+            res.sendError(2,SecurityConstant.COMPTE_DESACTIVE);
+        }
+		res.sendRedirect("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom());
 	}
-	
-	*/
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.sendError(1,SecurityConstant.LOGININCORRECT);
+    }
 }

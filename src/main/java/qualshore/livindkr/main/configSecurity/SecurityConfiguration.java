@@ -1,6 +1,5 @@
 package qualshore.livindkr.main.configSecurity;
 
-/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,27 +20,21 @@ import qualshore.livindkr.main.handler.SecurityHandler;
 import qualshore.livindkr.main.repository.UserRepository;
 import qualshore.livindkr.main.services.CustomUserDetailsService;
 
-*/
-
 /**
  * Created by User on 04/01/2018.
  */
 
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
-//@EnableWebSecurity
-//@EnableJpaRepositories(basePackageClasses = UserRepository.class)
-//@Configuration
-public class SecurityConfiguration {
-/*extends WebSecurityConfigurerAdapter{
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
+@Configuration
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 
     public SecurityConfiguration(CustomUserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-    
-    public SecurityConfiguration() {}
-
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -52,6 +45,9 @@ public class SecurityConfiguration {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
          auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
@@ -60,38 +56,29 @@ public class SecurityConfiguration {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SecurityConstant.SIGN_UP_URL).permitAll()
-                .antMatchers(HttpMethod.DELETE, "/**").permitAll() // enleve
-                .antMatchers(HttpMethod.PUT, "/**").permitAll() // enleve
+        http.cors()
+                .and().csrf().disable()
+                .httpBasic().disable()
+                .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/users/**").permitAll()
-                .antMatchers("/interests/**").permitAll() 
-                .antMatchers("/institution/**").permitAll() 
-                .antMatchers("/category/**").permitAll() 
-                .antMatchers("/typeOffre/**").permitAll() 
-                .antMatchers("/fonts/**").permitAll() 
-                .antMatchers("/**").permitAll()
+                .antMatchers("/fileupload").permitAll()
+                .antMatchers("/inscription").permitAll()
+                .antMatchers("/sendEmail").permitAll()
+                .antMatchers("/redirect/**").permitAll()
                 .antMatchers("/secured/**").hasRole("ADMIN")
                 .antMatchers("/all").hasRole("USER")
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error=true")
-                .usernameParameter("pseudo")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/welcome")
+                .and().exceptionHandling().accessDeniedHandler(securityHandler)
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(),userRepository))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+                .antMatchers("**/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
 
     @Bean
@@ -100,5 +87,4 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         return source;
     }
-    */
 }
