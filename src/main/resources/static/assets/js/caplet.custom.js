@@ -1,4 +1,5 @@
     $(function() {
+			   
 		//////////     MOBILE CHECK    //////////   
 		var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
 		var android = /mobile|android/i.test (navigator.userAgent);

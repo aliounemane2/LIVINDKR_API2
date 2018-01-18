@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.qualshore.livindakar_livindakar_war_0.0.1-SNAPSHOTPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:app/livindk</jta-data-source>
+    <class>com.qualshore.livindakar.mapping.SousCategorie</class>
+    <class>com.qualshore.livindakar.mapping.Event</class>
+    <class>com.qualshore.livindakar.mapping.TypeOffre</class>
+    <class>com.qualshore.livindakar.mapping.User</class>
+    <class>com.qualshore.livindakar.mapping.EventPhoto</class>
+    <class>com.qualshore.livindakar.mapping.Place</class>
+    <class>com.qualshore.livindakar.mapping.Vignette</class>
+    <class>com.qualshore.livindakar.mapping.Institution</class>
+    <class>com.qualshore.livindakar.mapping.EventInterest</class>
+    <class>com.qualshore.livindakar.mapping.UserInstitution</class>
+    <class>com.qualshore.livindakar.mapping.Article</class>
+    <class>com.qualshore.livindakar.mapping.Commentaire</class>
+    <class>com.qualshore.livindakar.mapping.Interest</class>
+    <class>com.qualshore.livindakar.mapping.TagDecouverte</class>
+    <class>com.qualshore.livindakar.mapping.TypeUser_1</class>
+    <class>com.qualshore.livindakar.mapping.Note</class>
+    <class>com.qualshore.livindakar.mapping.UserInterest</class>
+    <class>com.qualshore.livindakar.mapping.Notification</class>
+    <class>com.qualshore.livindakar.mapping.TypeUser</class>
+    <class>com.qualshore.livindakar.mapping.Categorie</class>
+    <class>com.qualshore.livindakar.mapping1.Interest</class>
+    <class>com.qualshore.livindakar.mapping1.EventPhoto</class>
+    <class>com.qualshore.livindakar.mapping1.Institution</class>
+    <class>com.qualshore.livindakar.mapping1.UsersInterests</class>
+    <class>com.qualshore.livindakar.mapping1.TypeOffre</class>
+    <class>com.qualshore.livindakar.mapping1.InstitutionMenu</class>
+    <class>com.qualshore.livindakar.mapping1.Commentaire</class>
+    <class>com.qualshore.livindakar.mapping1.Log</class>
+    <class>com.qualshore.livindakar.mapping1.Note</class>
+    <class>com.qualshore.livindakar.mapping1.UserProfil</class>
+    <class>com.qualshore.livindakar.mapping1.UserEvent</class>
+    <class>com.qualshore.livindakar.mapping1.TagDecouverte</class>
+    <class>com.qualshore.livindakar.mapping1.Notification</class>
+    <class>com.qualshore.livindakar.mapping1.Event</class>
+    <class>com.qualshore.livindakar.mapping1.InterestsEvents</class>
+    <class>com.qualshore.livindakar.mapping1.Place</class>
+    <class>com.qualshore.livindakar.mapping1.Menu</class>
+    <class>com.qualshore.livindakar.mapping1.SousCategory</class>
+    <class>com.qualshore.livindakar.mapping1.User</class>
+    <class>com.qualshore.livindakar.mapping1.Article</class>
+    <class>com.qualshore.livindakar.mapping1.Vignette</class>
+    <class>com.qualshore.livindakar.mapping1.Category</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties/>
+  </persistence-unit>
+</persistence>
