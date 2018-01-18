@@ -29,6 +29,8 @@ public class HelloController {
     private UserRepository userRepository;
     private UserRepository applicationUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
+    
 
     public HelloController(UserRepository applicationUserRepository,
                           BCryptPasswordEncoder bCryptPasswordEncoder){
@@ -53,7 +55,7 @@ public class HelloController {
 
     @GetMapping("/all")
     public String Hello(){
-        return "Hello livInDakr";
+        return bCryptPasswordEncoder.encode("passer");
     }
 
     @GetMapping("/secured/all")
