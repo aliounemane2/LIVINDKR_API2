@@ -134,7 +134,7 @@ public class InstitutionControllers {
 	
 	
 	
-	@RequestMapping(value="/delete_institution/{idInstitution}", method = RequestMethod.DELETE)
+	@RequestMapping(value="/delete_institution/{idInstitution}", method = RequestMethod.GET)
 	public Map<String,Object> delete_institution(@PathVariable Integer idInstitution) {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 
