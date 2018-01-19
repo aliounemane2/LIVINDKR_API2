@@ -283,7 +283,6 @@ public class InstitutionControllers {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 
-
 		List<Institution>  institution = institutionrepository.findAll();
 		
 		if(institution == null){

@@ -38,8 +38,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
         if(details.getIsActive() == false){
             res.sendError(2,SecurityConstant.COMPTE_DESACTIVE);
+        }else {
+    			res.sendRedirect("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom());
         }
-		res.sendRedirect("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom());
 	}
 
     @Override

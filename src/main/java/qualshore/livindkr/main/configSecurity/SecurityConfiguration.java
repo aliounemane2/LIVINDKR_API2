@@ -61,6 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/institution/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/fileupload").permitAll()
                 .antMatchers("/inscription").permitAll()

@@ -27,6 +27,7 @@ import java.util.*;
  * Created by User on 09/01/2018.
  */
 
+@Service
 public class InscriptionService {
 
     public static final String TITLE  = "Liv'in Dakar";
@@ -37,9 +38,6 @@ public class InscriptionService {
     private UserRepository userRepository;
 
     @Autowired
-    private Environment env;
-
-    @Autowired
     public InscriptionService(UserRepository userRepository , BCryptPasswordEncoder bCryptPasswordEncoder){
         this.userRepository = userRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
@@ -48,30 +46,26 @@ public class InscriptionService {
     public List<MessageResult> TraitementInscription(User user){
         List<MessageResult> results = new ArrayList<>();
 
-        if(user.getPseudo().equals("")){
+        if(user.getPseudo() == null){
             return addMessage("pseudo","null");
         }
 
-        User getUserByPseudo = userRepository.findByPseudo(user.getPseudo()).get();
-        if(!getUserByPseudo.equals(null)){
+        try {
+            User getUserByPseudo = userRepository.findByPseudo(user.getPseudo()).get();
             return addMessage("pseudo","existe pseudo");
-        }
+        }catch (Exception e){}
 
-        if(user.getEmail().equals("")){
+        if(user.getEmail().equals(null)){
             return addMessage("pseudo","null");
         }
 
         User getUserByEmail = userRepository.findByEmail(user.getEmail());
-        if(!getUserByEmail.equals(null)){
+        if(getUserByEmail != null){
             return addMessage("email","existe email");
         }
 
-        if(user.getPassword().equals("")){
+        if(user.getPassword()==null){
             return addMessage("password","vide");
-        }
-
-        if(user.getPhoto().equals("")){
-            user.setPhoto("default photo");
         }
 
         return results;
