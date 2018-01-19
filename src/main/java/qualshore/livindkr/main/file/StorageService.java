@@ -28,27 +28,31 @@ public class StorageService {
     Logger log = LoggerFactory.getLogger(this.getClass().getName());
     private final Path rootLocation = Paths.get("P:\\QualShore\\imageprofil");
 
-    public HashMap<Integer, String> store(MultipartFile file, User user)
+    public String store(MultipartFile file, User user)
     {
         HashMap<Integer, String> map = new HashMap<>();
+        String nomphoto = "";
         try {
-                String type = file.getContentType().toLowerCase();
+            String type = file.getContentType().toLowerCase();
                 if(!(type.equals(IMG_JPEG) || type.equals(IMG_JPG) || type.equals(IMG_PNG))){
-                    map.put(0, "Type photo invali");
+                    return "0";
                 }
-                int taille = Integer.parseInt(String.valueOf(file.getOriginalFilename().length()));
-                String extension = file.getOriginalFilename().substring(taille-4,taille);
 
-                byte[] bytes = file.getBytes();
-                File file1 = new File("P:\\QualShore\\imageprofil".concat("\\").concat(user.getPseudo()).concat(extension.toString()));
+            int taille = Integer.parseInt(String.valueOf(file.getOriginalFilename().length()));
+            String extension = file.getOriginalFilename().substring(taille-4,taille);
 
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
-                stream.write(bytes);
-                stream.close();
+            byte[] bytes = file.getBytes();
+            nomphoto = user.getPseudo().concat(extension.toString());
+            File file1 = new File("P:\\QualShore\\imageprofil".concat("\\").concat(nomphoto));
+
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
+            stream.write(bytes);
+            stream.close();
+
+            return nomphoto;
         } catch (Exception e) {
-            map.put(1, "Erreur d'enregistrement");
+            return nomphoto;
         }
-        return map;
     }
 
     public Resource loadFile(String filename) {

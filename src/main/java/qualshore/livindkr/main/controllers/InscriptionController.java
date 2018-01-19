@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import qualshore.livindkr.main.email.EmailHtmlSender;
 import qualshore.livindkr.main.email.EmailStatus;
 import qualshore.livindkr.main.entities.User;
+import qualshore.livindkr.main.entities.UserProfil;
 import qualshore.livindkr.main.file.StorageService;
 import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.repository.UserRepository;
@@ -43,16 +44,11 @@ public class InscriptionController {
     @Autowired
     StorageService storageService;
 
-    private InscriptionService service = new InscriptionService(userRepository, passwordEncoder);
+    @Autowired
+    private InscriptionService service;
 
     @PostMapping( name= "/inscription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<User> handleFileUpload(@RequestPart("user") User user, @RequestPart("file") MultipartFile file) {
-
-        HashMap<Integer, String> map = storageService.store(file,user);
-
-        if(!map.isEmpty()){
-            System.out.print(map);
-        }
 
         if(user.equals(null)){
             return ResponseEntity.status(0).eTag("objet vide").build();
@@ -60,11 +56,20 @@ public class InscriptionController {
 
         List<MessageResult> results = service.TraitementInscription(user);
 
-        if(results.size() == 0 ){
-            user.setActivationToken(CodeConfirmation(user.getIdUser().toString()));
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+        if(results.size() != 0 ){
+            return ResponseEntity.status(0).eTag(results.get(0).getMessage()).build();
         }
+        String map = storageService.store(file,user);
+        if(map.equals("") || map.equals("0")){
+            return ResponseEntity.status(0).eTag("erreur photo").build();
+        }
+        //user.setActivationToken(CodeConfirmation(user.getIdUser().toString()));
+        user.setActivationToken(258666);
+        user.setPhoto(map);
+        user.setIsActive(false);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setIdUserProfil(new UserProfil(1));
+        userRepository.save(user);
 
         Context context = service.sendMailConfirmation(user);
         EmailStatus emailStatus = emailHtmlSender.send(user.getEmail(),TITLE,TEMPLATE,context);
