@@ -16,6 +16,6 @@ public class SecurityConstant {
     public static final String IMG_JPG = "image/jpg";
     public static final String IMG_JPEG = "image/jpeg";
     public static final String IMG_PNG = "image/png";
-    public static final String IMG_CSV = "image/csv";
+    public static final String TOKEN = "Token invalide";
 }
 

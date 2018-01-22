@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import qualshore.livindkr.main.configSecurity.SecurityConstant;
 import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.entities.CustomUserDetails;
+import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,5 +93,15 @@ public class HelloController {
         map.put("key",SecurityConstant.TOKEN_PREFIX + token);
         map.put("status","0");
         return map;
+    }
+
+    @GetMapping("/redirect/{id}")
+    public MessageResult redirectTo(@PathVariable("id") int id){
+        switch (id){
+            case 0: return new MessageResult("0",SecurityConstant.LOGININCORRECT);
+            case 1: return new MessageResult("1",SecurityConstant.TOKEN);
+            case 2: return new MessageResult("2",SecurityConstant.COMPTE_DESACTIVE);
+        }
+        return new MessageResult();
     }
 }

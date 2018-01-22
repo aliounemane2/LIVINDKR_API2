@@ -37,7 +37,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
 		CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
         if(details.getIsActive() == false){
-            res.sendError(2,SecurityConstant.COMPTE_DESACTIVE);
+			res.sendRedirect("/redirect/2");
         }else {
     			res.sendRedirect("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom());
         }
@@ -45,6 +45,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.sendError(1,SecurityConstant.LOGININCORRECT);
+		response.sendRedirect("/redirect/0");
     }
 }

@@ -44,7 +44,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         if(authentication == null){
-            res.sendError(2, "Token invalide");
+			res.sendRedirect("/redirect/1");
         }else{
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);

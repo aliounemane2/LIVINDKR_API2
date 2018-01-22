@@ -82,6 +82,7 @@ public class InscriptionController {
         return new MessageResult("0","inscription confirmer ");
     }
 
+
     @GetMapping("/ConfirmationEmail/{code}")
     public MessageResult ConfirmationEmail(@PathVariable int code){
         User user = userRepository.findByActivationToken(code);
