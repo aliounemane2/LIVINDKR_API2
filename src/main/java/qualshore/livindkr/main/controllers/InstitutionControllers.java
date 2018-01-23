@@ -8,7 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import qualshore.livindkr.main.entities.Category;
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Institution;
 import qualshore.livindkr.main.entities.SousCategory;
 import qualshore.livindkr.main.entities.User;
@@ -47,7 +49,7 @@ public class InstitutionControllers {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 
 		String location = env.getProperty("root.location.load");
-		
+
 		Institution institution = institutionrepository.findByIdInstitution(idInstitution);
 		
 		if (institution == null ) { 
@@ -182,11 +184,16 @@ public class InstitutionControllers {
 	
 	
 
-	@RequestMapping(value="/recommandation/{idUser}", method = RequestMethod.GET)
+	@RequestMapping(value="/recommandation", method = RequestMethod.GET)
 	public Map<String,Object> recommandation(User idUser) {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
 
 		
 		List<Institution>  institution = institutionrepository.findRecommandations(idUser);
@@ -194,6 +201,7 @@ public class InstitutionControllers {
 		if (institution.size() == 0) {
 			
 			h.put("message", "Aucun Institution ne correspond a ses centres d'interets. ");
+			h.put("status", -1);
 			return h;
 			
 		}
@@ -246,9 +254,14 @@ public class InstitutionControllers {
 	
 	
 	
-	@RequestMapping(value="/InstitutionByUser/{idUser}", method = RequestMethod.GET)
+	@RequestMapping(value="/InstitutionByUser/", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> InstitutionByUser(@PathVariable User idUser) {
+	public Map<String,Object> InstitutionByUser(User idUser) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
 		
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");

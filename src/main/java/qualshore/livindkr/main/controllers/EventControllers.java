@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Event;
 import qualshore.livindkr.main.entities.Institution;
 import qualshore.livindkr.main.entities.InterestsEvents;
@@ -46,8 +49,14 @@ public class EventControllers {
 	Environment env;
 	
 	
-	@RequestMapping(value="/events_by_user/{idUser}", method=RequestMethod.GET)
-	public HashMap<String, Object> getAllEventsByUser(@PathVariable User idUser){
+	@RequestMapping(value="/events_by_user/", method=RequestMethod.GET)
+	public HashMap<String, Object> getAllEventsByUser( User idUser){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
 		
 		HashMap<String, Object> h= new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");

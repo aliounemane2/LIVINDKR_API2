@@ -193,10 +193,11 @@ public class UserControllers {
 	
 	
 
-	@RequestMapping(value="/list_interest/{id}", method=RequestMethod.GET)
-	public HashMap<String, Object> getUserByInterests(@PathVariable Integer id){
+	@RequestMapping(value="/list_interest/", method=RequestMethod.GET)
+	public HashMap<String, Object> getUserByInterests(Integer id){
 		
 		HashMap<String, Object> h= new HashMap<String, Object>();
+		
 		
 		// Interest interests = interestrepository.findOne(id);
 		User user = userrepository.findByIdUser(id);
