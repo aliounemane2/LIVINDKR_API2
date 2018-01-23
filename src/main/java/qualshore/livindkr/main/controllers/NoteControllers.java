@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Event;
 import qualshore.livindkr.main.entities.EventPhoto;
 import qualshore.livindkr.main.entities.Institution;
@@ -75,8 +78,12 @@ public class NoteControllers {
 	public Map<String,Object> notes(@RequestBody Note note) {
 		
 		HashMap<String, Object> h = new HashMap<String, Object>();
-		
-
+		User idUser;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
+        note.setIdUser(idUser);
 		
 		Note ss = noteRepository.findInstitutionUser(note.getIdUser(), note.getIdInstitution());
 		
@@ -99,18 +106,26 @@ public class NoteControllers {
 	}
 	
 	
-	@RequestMapping(value="/note_by_user/{idUser}", method = RequestMethod.GET)
-	public Map<String,Object> notebyUser(@PathVariable User idUser) {
+	@RequestMapping(value="/note_by_user/", method = RequestMethod.GET)
+	public Map<String,Object> notebyUser(User idUser) {
 		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
+        
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		List<Note> s = noteRepository.findNoteByUser(idUser);
 		
-		if (s == null) {
+		if (s.size() == 0) {
+			h.put("status", -1);
 			h.put("message", "L'utilisateur n'a pas de note.");
 			return h;	
 		}
 			h.put("message", "La note de l'utilisateur est :");
 			h.put("note", s);
+			h.put("status",0);
 			return h;
 		
 	}

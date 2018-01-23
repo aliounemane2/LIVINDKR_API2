@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import qualshore.livindkr.main.configSecurity.SecurityConstant;
 import qualshore.livindkr.main.entities.User;
+import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.repository.UserRepository;
 
@@ -92,5 +93,10 @@ public class HelloController {
         map.put("key",SecurityConstant.TOKEN_PREFIX + token);
         map.put("status","0");
         return map;
+    }
+    
+    @GetMapping("/redirect")
+    public MessageResult redirectloginInconrect () {
+    		return new MessageResult("1",SecurityConstant.LOGININCORRECT);
     }
 }
