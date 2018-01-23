@@ -30,7 +30,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		this.userRepository = userRepository;
 	}
 
-
+	public String getUrl(HttpServletRequest req){
+		StringBuffer path1 = req.getRequestURL();
+		String url[] = path1.toString().split("login");
+		return url[0];
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -44,7 +48,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         if(authentication == null){
-			res.sendRedirect("/redirect/1");
+			res.sendRedirect(getUrl(req).concat("/redirect/1"));
         }else{
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);

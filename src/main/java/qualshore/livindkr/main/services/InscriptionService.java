@@ -16,6 +16,7 @@ import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.awt.image.renderable.RenderableImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -31,7 +32,7 @@ import java.util.*;
 public class InscriptionService {
 
     public static final String TITLE  = "Liv'in Dakar";
-    public static final String TEMPLATE  = "templatemail.html";
+    public static final String TEMPLATE  = "templatemail";
     private static List<MessageResult> results = new ArrayList<>();
 
     private BCryptPasswordEncoder passwordEncoder;

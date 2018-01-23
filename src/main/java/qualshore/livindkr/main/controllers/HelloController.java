@@ -89,7 +89,6 @@ public class HelloController {
                 .signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRET.getBytes())
                 .compact();
         res.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX + token);
-        res.setHeader(SecurityConstant.HEADER_STRING,SecurityConstant.TOKEN_PREFIX + token);
         map.put("key",SecurityConstant.TOKEN_PREFIX + token);
         map.put("status","0");
         return map;

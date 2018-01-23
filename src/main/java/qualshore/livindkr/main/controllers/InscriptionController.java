@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
+import qualshore.livindkr.main.configSecurity.SecurityConstant;
 import qualshore.livindkr.main.email.EmailHtmlSender;
 import qualshore.livindkr.main.email.EmailStatus;
 import qualshore.livindkr.main.entities.User;
@@ -51,7 +52,7 @@ public class InscriptionController {
     public MessageResult handleFileUpload(@RequestPart("user") User user, @RequestPart(name="file",required=false) MultipartFile file) {
 
         if(user.equals(null)){
-            return new MessageResult("0","objet vide");
+            return new MessageResult("0",SecurityConstant.VIDE_USER);
         }
 
         List<MessageResult> results = service.TraitementInscription(user);
@@ -65,27 +66,34 @@ public class InscriptionController {
         }else{
             user.setPhoto(map);
         }
-        //user.setActivationToken(CodeConfirmation(user.getIdUser().toString()));
-        user.setActivationToken(258666);
+
         user.setIsActive(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIdUserProfil(new UserProfil(1));
+        user.setActivationToken(0);
         userRepository.save(user);
+
+        if(user.getIdUser() != null){
+            user.setActivationToken(CodeConfirmation(user.getIdUser().toString()));
+            userRepository.save(user);
+        }
 
         Context context = service.sendMailConfirmation(user);
         EmailStatus emailStatus = emailHtmlSender.send(user.getEmail(),TITLE,TEMPLATE,context);
 
         if(emailStatus.isError()){
-            return new MessageResult("0","Erreur d'envoi");
+            return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
         }
 
-        return new MessageResult("0","inscription confirmer ");
+        return new MessageResult("2",SecurityConstant.INSCRIPTIONMSM);
     }
 
 
-    @GetMapping("/ConfirmationEmail/{code}")
-    public MessageResult ConfirmationEmail(@PathVariable int code){
-        User user = userRepository.findByActivationToken(code);
+    @GetMapping("/ConfirmationEmail")
+    public MessageResult ConfirmationEmail(@RequestParam("code") String code){
+        String code1 = "";
+        passwordEncoder.matches(code1, code);
+        User user = userRepository.findByActivationToken(Integer.parseInt(code1));
         if(user.equals(null)){
             return new MessageResult("erreur","Code n'existe pas");
         }
