@@ -184,11 +184,16 @@ public class InstitutionControllers {
 	
 	
 
-	@RequestMapping(value="/recommandation/{idUser}", method = RequestMethod.GET)
+	@RequestMapping(value="/recommandation", method = RequestMethod.GET)
 	public Map<String,Object> recommandation(User idUser) {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
 
 		
 		List<Institution>  institution = institutionrepository.findRecommandations(idUser);
@@ -196,6 +201,7 @@ public class InstitutionControllers {
 		if (institution.size() == 0) {
 			
 			h.put("message", "Aucun Institution ne correspond a ses centres d'interets. ");
+			h.put("status", -1);
 			return h;
 			
 		}

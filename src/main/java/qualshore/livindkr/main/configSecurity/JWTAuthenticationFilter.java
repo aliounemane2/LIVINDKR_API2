@@ -47,7 +47,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	public String getUrl(HttpServletRequest req){
 		StringBuffer path1 = req.getRequestURL();
-		String url[] = path1.toString().split("login");
+		String url[] = path1.toString().split("/login");
 		return url[0];
 	}
 
