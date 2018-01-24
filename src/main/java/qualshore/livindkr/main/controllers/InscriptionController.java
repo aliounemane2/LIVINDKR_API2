@@ -1,5 +1,7 @@
 package qualshore.livindkr.main.controllers;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +23,7 @@ import qualshore.livindkr.main.services.InscriptionService;
 import javax.servlet.annotation.MultipartConfig;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,28 +81,40 @@ public class InscriptionController {
             userRepository.save(user);
         }
 
-        Context context = service.sendMailConfirmation(user);
-        EmailStatus emailStatus = emailHtmlSender.send(user.getEmail(),TITLE,TEMPLATE,context);
-
-        if(emailStatus.isError()){
+        if(sendEmail(user.getActivationToken().toString(), user.getEmail()).isError()){
             return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
         }
-
         return new MessageResult("2",SecurityConstant.INSCRIPTIONMSM);
     }
 
+    private EmailStatus sendEmail(String code,String email){
+        String token = Jwts.builder()
+                .setSubject(code)
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME ))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRET.getBytes())
+                .compact();
+
+        Context context = service.sendMailConfirmation(token);
+        EmailStatus emailStatus = emailHtmlSender.send(email,TITLE,TEMPLATE,context);
+
+        return emailStatus;
+    }
 
     @GetMapping("/ConfirmationEmail")
-    public MessageResult ConfirmationEmail(@RequestParam("code") String code){
-        String code1 = "";
-        passwordEncoder.matches(code1, code);
-        User user = userRepository.findByActivationToken(Integer.parseInt(code1));
-        if(user.equals(null)){
+    public MessageResult ConfirmationEmail(@RequestParam("token") String token){
+        String code = Jwts.parser()
+                .setSigningKey(SecurityConstant.SECRET.getBytes())
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+        User user = userRepository.findByActivationToken(Integer.parseInt(code));
+        try {
+            user.setIsActive(true);
+            userRepository.save(user);
+            return new MessageResult("update", "Compte activé");
+        }catch (Exception e){
             return new MessageResult("erreur","Code n'existe pas");
         }
-        user.setIsActive(true);
-        userRepository.save(user);
-        return new MessageResult("update", "Compte activé");
     }
 
     @GetMapping("/verifierPseudo/{pseudo}")
@@ -112,12 +127,19 @@ public class InscriptionController {
         }
     }
 
-    @GetMapping("/verifierEmail/{email}")
-    public MessageResult verifierEmail(@PathVariable("email") String email){
+    @GetMapping("/verifierEmail/{email}/{staus")
+    public MessageResult verifierEmail(@PathVariable("email") String email, @PathVariable(name="status", required = false) Integer status){
         try {
             User getUserByEmail = userRepository.findByEmail(email);
                 if(getUserByEmail == null){
                     return new MessageResult("status","1");
+                }
+                if(status.equals(1)){
+                    EmailStatus emailStatus = sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail());
+                    if(emailStatus.isError()){
+                        return new MessageResult("status", "2");
+                    }
+                    return new MessageResult("status", "3");
                 }
             return new MessageResult("status","0");
         }catch (Exception e){

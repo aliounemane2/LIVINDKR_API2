@@ -77,11 +77,11 @@ public class InscriptionService {
         return results;
     }
 
-    public Context sendMailConfirmation(User user){
+    public Context sendMailConfirmation(String token){
         Context context = new Context();
-        context.setVariable("title", "Lorem Ipsum");
+        context.setVariable("title", "Validation compte");
         context.setVariable("description", "Lorem Lorem Lorem");
-        context.setVariable("lien", passwordEncoder.encode(user.getActivationToken().toString()));
+        context.setVariable("lien", token);
         return context;
     }
 
