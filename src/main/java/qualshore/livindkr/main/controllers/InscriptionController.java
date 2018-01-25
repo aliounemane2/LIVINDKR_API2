@@ -2,6 +2,7 @@ package qualshore.livindkr.main.controllers;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.dom4j.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -88,32 +89,26 @@ public class InscriptionController {
     }
 
     private EmailStatus sendEmail(String code,String email){
-        String token = Jwts.builder()
-                .setSubject(code)
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME ))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRET.getBytes())
-                .compact();
-
+        String token = Jwts.builder().setSubject(code).compact();
         Context context = service.sendMailConfirmation(token);
         EmailStatus emailStatus = emailHtmlSender.send(email,TITLE,TEMPLATE,context);
 
         return emailStatus;
     }
 
-    @GetMapping("/ConfirmationEmail")
-    public MessageResult ConfirmationEmail(@RequestParam("token") String token){
-        String code = Jwts.parser()
-                .setSigningKey(SecurityConstant.SECRET.getBytes())
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-        User user = userRepository.findByActivationToken(Integer.parseInt(code));
+    @GetMapping("/ConfirmationEmail/{token}")
+    public MessageResult ConfirmationEmail(@PathVariable("token") String token){
         try {
-            user.setIsActive(true);
-            userRepository.save(user);
-            return new MessageResult("update", "Compte activé");
+            String token1 = Jwts.parser().parse(token.concat(".")).getBody().toString();
+            User user = userRepository.findByActivationToken(Integer.parseInt(token1));
+            if(user != null){
+                user.setIsActive(true);
+                userRepository.save(user);
+                return new MessageResult("0", "Compte activé");
+            }
+            return new MessageResult("2","Code est incorrecte");
         }catch (Exception e){
-            return new MessageResult("erreur","Code n'existe pas");
+            return new MessageResult("1","Code est incorrecte");
         }
     }
 
@@ -127,7 +122,7 @@ public class InscriptionController {
         }
     }
 
-    @GetMapping("/verifierEmail/{email}/{staus")
+    @GetMapping("/verifierEmail/{email}/{status}")
     public MessageResult verifierEmail(@PathVariable("email") String email, @PathVariable(name="status", required = false) Integer status){
         try {
             User getUserByEmail = userRepository.findByEmail(email);
