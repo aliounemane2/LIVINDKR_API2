@@ -5,8 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { UserService } from './shared_service/user.service';
 import {RouterModule, Routes} from '@angular/router';
-
-import { RegisterService } from './register/register.service';
+import { RegisterService } from './service/register.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -25,6 +24,8 @@ import { PassforgetComponent } from './passforget/passforget.component';
 import {HttpClientModule} from '@angular/common/http';
 
 import { TokenService } from './service/token.service';
+import { SendemailComponent } from './sendemail/sendemail.component';
+
 
 
 
@@ -41,7 +42,8 @@ export const appRoutes:Routes=[
   {path:'login', component:LoginComponent },
   {path:'register', component:RegisterComponent },
   {path:'updatePassword', component:PassforgetComponent },
-  
+  {path:'sendemail', component:SendemailComponent },
+  {path:'sendemail/:code', component:SendemailComponent }
 
 ]
 
@@ -58,6 +60,7 @@ export const appRoutes:Routes=[
     LoginComponent,
     RegisterComponent,
     PassforgetComponent,
+    SendemailComponent
   ],
   imports: [
     BrowserModule,

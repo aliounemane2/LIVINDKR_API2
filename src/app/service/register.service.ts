@@ -5,8 +5,7 @@ import { HttpClient, HttpParams,HttpErrorResponse, HttpHeaders,HttpRequest } fro
 export class RegisterService {
 
   file: File;
-  private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API';
-
+  
   constructor(private http:HttpClient) { }
 
   Save_Inscription(file,utilisateur) {
@@ -18,16 +17,20 @@ export class RegisterService {
       formData.append('file', this.file);
       formData.append('user',userBlob);
 
-      const req = new HttpRequest('POST', this.baseUrl+'/inscription', formData);
+      const req = new HttpRequest('POST', 'http://localhost:8181/inscription', formData);
       return this.http.request(req);
     }
 
   Verifier_Pseudo(pseudo){
-    return this.http.get(this.baseUrl+'/verifierPseudo/'+pseudo)
+    return this.http.get('http://localhost:8181/verifierPseudo/'+pseudo)
   }
 
-  Verifier_Email(email){
-    return this.http.get(this.baseUrl+'/verifierEmail/'+email)
+  Verifier_Email(email,id){
+    return this.http.get('http://localhost:8181/verifierEmail/'+email+'/'+id);
+  }
+
+  Activer_Compte(code){
+    return this.http.get('http://localhost:8181/ConfirmationEmail/'+code);
   }
 
 }
