@@ -18,8 +18,6 @@ export class LoginComponent implements OnInit {
     username:string;
     password:string;
     loginOK:boolean;
-    private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API';
-
 
   constructor(private router : Router, private http: HttpClient, private tokenservice: TokenService,public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
@@ -54,10 +52,14 @@ export class LoginComponent implements OnInit {
     this.router.navigateByUrl('/register');
   }
 
+  activerCompte(){
+    this.router.navigateByUrl('/sendemail');
+  }
+
   authentification(){
     this.loginOK = false;
     setTimeout(()=>{    
-      this.http.post(this.baseUrl+'/login',
+      this.http.post('http://localhost:8181/login',
       new HttpParams().set('pseudo', this.username).set('password', this.password)).subscribe(
       data => {
         

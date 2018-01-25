@@ -1,4 +1,4 @@
-import { RegisterService } from './register.service';
+import { RegisterService } from './../service/register.service';
 import { HttpClient, HttpParams,HttpErrorResponse, HttpHeaders,HttpRequest } from '@angular/common/http';
 import { Headers, Request, RequestOptions } from '@angular/http';
 import { user } from './../login/user';
@@ -45,9 +45,9 @@ export class RegisterComponent implements OnInit {
                 var accountH = $(".account-wall").outerHeight();
                 var marginT = (mainH - accountH) / 2;
                 if (marginT > 30) {
-                    $(".account-wall").css("margin-top", marginT - 15);
+                    $(".account-wall").css("margin-top", marginT - 0);
                 } else {
-                    $(".account-wall").css("margin-top", 30);
+                    $(".account-wall").css("margin-top", 0);
                 }
             }
             toCenter();
@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
       data => {
         let message = data["body"];
         if(message !== undefined){
-          this.toastr.success(message["corps"]+" "+message["corps"],"Information !");
+          this.toastr.success(message["message"]+" "+message["corps"],"Information !");
           this.loginOK = true;
         }
         },
@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit {
   }
 
   Verifier_Email(){
-    this.service.Verifier_Email(this.utilisateur.email).subscribe(
+    this.service.Verifier_Email(this.utilisateur.email,0).subscribe(
       data => {
         this.statusemail = data["corps"]==="0" ? true : false;
       },
