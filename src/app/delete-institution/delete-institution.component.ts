@@ -221,7 +221,7 @@ export class DeleteInstitutionComponent implements OnInit {
       idSousCategory=+json.idSousCategory;
     }
 
-    let institution = new Institution(this.updateInstitution, adresseIns, latitudeIns,longitudeIns,nomIns,this.photo,telephoneIns,descriptionIns,solde,price,idCategory,idSousCategory,idTypeoffre,4,interestIdInterest);
+    let institution = new Institution(this.updateInstitution, adresseIns, latitudeIns,longitudeIns,nomIns,this.photo,telephoneIns,descriptionIns,solde,price,idCategory,idSousCategory,idTypeoffre,interestIdInterest);
     console.log(" COOOOOLLLLLLLLL ");
     console.log(institution);
 

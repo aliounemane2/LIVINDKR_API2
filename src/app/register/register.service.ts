@@ -5,7 +5,7 @@ import { HttpClient, HttpParams,HttpErrorResponse, HttpHeaders,HttpRequest } fro
 export class RegisterService {
 
   file: File;
-  private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API';
+  private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API3';
 
   constructor(private http:HttpClient) { }
 

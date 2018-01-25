@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     username:string;
     password:string;
     loginOK:boolean;
-    private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API';
+    private baseUrl:string = 'http://213.246.59.111:8080/LIVINDKR_API3';
 
 
   constructor(private router : Router, private http: HttpClient, private tokenservice: TokenService,public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
         
           if(data["status"] !== undefined && data["status"] === "0"){
              this.tokenservice.setToken(data["key"]);
-             alert(this.tokenservice.getToken());
+             // alert(this.tokenservice.getToken());
           }else{
             this.toastr.error(data["corps"], 'Information!',{showCloseButton:true,positionClass:'toast-top-center',animate:'flyLeft'});
           }

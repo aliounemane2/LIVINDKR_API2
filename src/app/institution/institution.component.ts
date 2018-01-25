@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 import {User} from '../classes/user';
 import {UserService} from '../shared_service/user.service';
-import { Institution } from 'app/institution/institution';
+import { Institution } from '../institution/institution';
 declare var $:any;
 
 
@@ -64,117 +64,15 @@ export class InstitutionComponent implements OnInit {
     // this.getAllCategoryBySouscategory(idCategory);
     this.getAllInterets();
     this.getAllTypesOffres();
-    this.loadJquery();
-    this.loadJquery2();
+ 
 
   }
 
-  loadJquery(){
-    $('nav#menu-right').mmenu({
-			position	: 'right',
-			searchfield	: true
-		});
-    
-  }
-
-  loadJquery2(){
-    $('nav#menu-left').mmenu({
-			position	: 'left',
-			searchfield	: true
-		});
-    
-  }
 
 
-  loadJquery3(){
-
-              // Menu Left
-              var navMenu=$("nav#menu");
-              navMenu.each(function(i) {
-                  var nav=$(this), data=nav.data();
-                  nav.mmenu({
-                    searchfield   :  data.search ? false : true,	
-                    slidingSubmenus	: true
-                  }).on( "closing.mm", function(){
-                    var highest=$(this).find("ul.mm-highest");
-                    highest.find(".mm-subclose").trigger('click');
-                    setTimeout(function () { closeSub() }, 200);
-                  });
-              });
-  
-              $(".nav-mini").on('click',function(){
-                $("body").toggleClass( "in" );  	
-                closeSub();
-                if($(window).width() < 991 ){
-                  navMenu.trigger( 'open.mm' );
-                }
-              });
 
 
-            // Menu right
-            var navRight=$('nav#menu-right');
-            navRight.mmenu({
-              position	: 'right',
-              counters	: true,
-              searchfield	: {
-                add					: true,
-                search				: true,
-                showLinksOnly		: false,
-              }
-            });
-
-
-            // function Auto close sub menu
-            function closeSub(){
-              if(navMenu.hasClass("mm-vertical")){
-                navMenu.find("li").each(function(i) {
-                  $(this).removeClass("mm-opened");	
-                });
-              }else{
-                navMenu.find("ul").each(function(i) {
-                  if(i==0){
-                    $(this).removeClass("mm-subopened , mm-hidden").addClass("mm-current");	
-                  }else{
-                    $(this).removeClass("mm-opened , mm-subopened , mm-current  , mm-highest").addClass("mm-hidden");						
-                  }	
-                });
-              }
-            }
-
-            //////////     TOGGLE  OPEN LEFT CANVAS MENU      //////////
-            $("body").append('<div class="toggle-menu"/>');
-            $('body').on("click",".toggle-menu",function( e ) {
-                e.stopImmediatePropagation();
-                e.preventDefault();
-                $('nav#menu').trigger( 'open.mm' );
-            });
-
-
-            //////////     TOUCH TO OPEN CANVAS MENU      //////////
-            $('li[data-counter-color]').each(function(i) {
-              var counter=$(this).find("em.mm-counter");
-              counter.css({"background-color":$.fillColor($(this)),"color":"#FFF" });
-            });
-
-
-            //////////     TOUCH TO OPEN CANVAS MENU      //////////
-           /* var nav=document.getElementById("nav");
-            if(nav){
-              var wrapper= Hammer( nav );
-              wrapper.on("dragright", function(event) {	// hold , tap, doubletap ,dragright ,swipe, swipeup, swipedown, swipeleft, swiperight
-                if((event.gesture.deltaY<=7 && event.gesture.deltaY>=-7) && event.gesture.deltaX >100){
-                  $('nav#menu').trigger( 'open.mm' );
-                }
-              });
-              wrapper.on("dragleft", function(event) {
-                if((event.gesture.deltaY<=5 && event.gesture.deltaY>=-5) && event.gesture.deltaX <-100){
-                  $('nav#contact-right').trigger( 'open.mm' );
-                }
-              });
-            }*/
-
-
-  }
+ 
 
 
    // Fetch all Category
@@ -322,7 +220,7 @@ export class InstitutionComponent implements OnInit {
 
 
 
-      let institution = new Institution(null, adresseIns, latitudeIns,longitudeIns,nomIns,this.photo,telephoneIns,descriptionIns,solde,price,idCategory,idSousCategory,idTypeoffre,4,interestIdInterest);
+      let institution = new Institution(null, adresseIns, latitudeIns,longitudeIns,nomIns,this.photo,telephoneIns,descriptionIns,solde,price,idCategory,idSousCategory,idTypeoffre,interestIdInterest);
       console.log(institution);
       console.log("TEST VALEUR DE SOUS CATEGORIE ");
 

@@ -8,9 +8,9 @@ import { InterestEvent } from '../evenement/interestEvent';
 
 @Injectable()
 export class EvenementService {
-	private BACKEND_URL = 'http://213.246.59.111:8080/LIVINDKR_API/';
+	private BACKEND_URL = 'http://213.246.59.111:8080/LIVINDKR_API3';
 	//private BACKEND_URL = 'http://localhost:8080';
-  public URL_PHOTO = 'http://213.246.59.111:8080/LIVINDKR_API/event/upload/';
+  public URL_PHOTO = 'http://213.246.59.111:8080/LIVINDKR_API3/event/upload/';
 	private headers = new Headers({'Content-Type': 'application/json'});
 	private options = new RequestOptions({headers: this.headers});
 

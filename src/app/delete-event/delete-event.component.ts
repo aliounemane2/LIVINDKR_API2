@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Evenement } from 'app/evenement/evenement';
-import { UserService } from 'app/shared_service/user.service';
+import { Evenement } from '../evenement/evenement';
+import { UserService } from '../shared_service/user.service';
 import {Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Location } from '@angular/common';
@@ -183,7 +183,7 @@ getEventId(id) {
     }
 
 
-    let evenements = new Evenement(this.updateEvent, nom, desc,date,heuredeb,heurefin,this.idPlace,ins,this.photo,interet,4,interet);
+    let evenements = new Evenement(this.updateEvent, nom, desc,date,heuredeb,heurefin,this.idPlace,ins,this.photo,interet,interet);
     let eventIntrest = new InterestEvent(null,heuredeb,heurefin,interet,null);
     // let evenement : any;
     console.log("EVENEMENT ");
