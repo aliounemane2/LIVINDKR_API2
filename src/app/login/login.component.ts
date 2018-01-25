@@ -54,6 +54,10 @@ export class LoginComponent implements OnInit {
     this.router.navigateByUrl('/register');
   }
 
+  activerCompte(){
+    this.router.navigateByUrl('/sendemail');
+  }
+
   authentification(){
     this.loginOK = false;
     setTimeout(()=>{    

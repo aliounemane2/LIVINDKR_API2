@@ -26,8 +26,12 @@ export class RegisterService {
     return this.http.get(this.baseUrl+'/verifierPseudo/'+pseudo)
   }
 
-  Verifier_Email(email){
-    return this.http.get(this.baseUrl+'/verifierEmail/'+email)
+  Verifier_Email(email,id){
+    return this.http.get(this.baseUrl+'/verifierEmail/'+email+'/'+id);
+  }
+
+  Activer_Compte(code){
+    return this.http.get(this.baseUrl+'/ConfirmationEmail/'+code);
   }
 
 }
