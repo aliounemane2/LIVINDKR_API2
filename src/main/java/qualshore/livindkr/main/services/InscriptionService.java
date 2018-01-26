@@ -33,6 +33,7 @@ public class InscriptionService {
 
     public static final String TITLE  = "Liv'in Dakar";
     public static final String TEMPLATE  = "templatemail";
+    public static final String TEMPLATEPASSWORD  = "templatepassword";
     private static List<MessageResult> results = new ArrayList<>();
 
     private BCryptPasswordEncoder passwordEncoder;
@@ -77,11 +78,12 @@ public class InscriptionService {
         return results;
     }
 
-    public Context sendMailConfirmation(String token){
+    public Context sendMailConfirmation(String token,String email){
         Context context = new Context();
         context.setVariable("title", "Validation compte");
         context.setVariable("description", "Lorem Lorem Lorem");
         context.setVariable("lien", token);
+        context.setVariable("email", email);
         return context;
     }
 

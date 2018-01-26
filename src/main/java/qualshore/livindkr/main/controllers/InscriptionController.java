@@ -82,24 +82,24 @@ public class InscriptionController {
             userRepository.save(user);
         }
 
-        if(sendEmail(user.getActivationToken().toString(), user.getEmail()).isError()){
+        if(sendEmail(user.getActivationToken().toString(), user.getEmail(),TEMPLATE).isError()){
             return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
         }
         return new MessageResult("2",SecurityConstant.INSCRIPTIONMSM);
     }
 
-    private EmailStatus sendEmail(String code,String email){
-        String token = Jwts.builder().setSubject(code).compact();
-        Context context = service.sendMailConfirmation(token);
-        EmailStatus emailStatus = emailHtmlSender.send(email,TITLE,TEMPLATE,context);
+    private EmailStatus sendEmail(String code,String email, String template){
+        String token = setToken(code);
+        Context context = service.sendMailConfirmation(token,email);
+        EmailStatus emailStatus = emailHtmlSender.send(email,TITLE,template,context);
 
         return emailStatus;
     }
 
-    @GetMapping("/ConfirmationEmail/{token}")
-    public MessageResult ConfirmationEmail(@PathVariable("token") String token){
+    @PostMapping("/ConfirmationEmail")
+    public MessageResult ConfirmationEmail(@RequestParam("code") String token){
         try {
-            String token1 = Jwts.parser().parse(token.concat(".")).getBody().toString();
+            String token1 = getToken(token);
             User user = userRepository.findByActivationToken(Integer.parseInt(token1));
             if(user != null){
                 user.setIsActive(true);
@@ -130,7 +130,10 @@ public class InscriptionController {
                     return new MessageResult("status","1");
                 }
                 if(status.equals(1)){
-                    EmailStatus emailStatus = sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail());
+                    if(getUserByEmail.getIsActive() == true){
+                        return new MessageResult("status", "4");
+                    }
+                    EmailStatus emailStatus = sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail(),TEMPLATE);
                     if(emailStatus.isError()){
                         return new MessageResult("status", "2");
                     }
@@ -140,5 +143,40 @@ public class InscriptionController {
         }catch (Exception e){
             return new MessageResult("status","1");
         }
+    }
+
+    @PostMapping("/updatePassword")
+    public MessageResult updatePassword(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("id") int id){
+        if(id == 0){
+            EmailStatus emailStatus = sendEmail(password,email,TEMPLATEPASSWORD);
+            if(emailStatus.isError()){
+                return new MessageResult("status", "2");
+            }
+            return new MessageResult("status", "1");
+        }
+        try {
+            User user = userRepository.findByEmail(email);
+            if(user == null){
+                return new MessageResult("status", "0");
+            }
+            String passwordUpdate = getToken(password);
+            user.setPassword(passwordEncoder.encode(passwordUpdate));
+            userRepository.save(user);
+            return new MessageResult("status", "1");
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+        }
+        return new MessageResult("status", "0");
+    }
+
+    private String setToken(String token){
+        return Jwts.builder().setSubject(token).signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRETE.getBytes()).compact();
+    }
+
+    private String getToken(String token){
+        //return Jwts.parser().parsePlaintextJws(token.endsWith(".") ? token : token.concat(".")).toString();
+        return Jwts.parser().setSigningKey(SecurityConstant.SECRETE.getBytes())
+                .parseClaimsJws(token)
+                .getBody().getSubject();
     }
 }

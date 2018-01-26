@@ -92,6 +92,8 @@ public class HelloController {
         res.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX + token);
         map.put("key",SecurityConstant.TOKEN_PREFIX + token);
         map.put("status","0");
+        user.setLastconnexion(new Date().toString());
+        userRepository.save(user);
         return map;
     }
 
