@@ -19,6 +19,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import qualshore.livindkr.main.entities.Category;
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Interest;
 import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.entities.UsersInterests;
@@ -144,6 +147,34 @@ public class UserControllers {
 	
 	
 	
+	
+	
+	@RequestMapping(value = "/getuser", method = RequestMethod.GET)
+    public HashMap<String, Object> getUserById(Integer id) {
+		
+		HashMap<String, Object> h= new HashMap<String, Object>();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        User idUser= customUserDetails;
+        id = idUser.getIdUser();
+        User user = userrepository.findByIdUser(id);
+
+        if (user == null) {
+	        
+        		h.put("message", "innexistant");
+	    		h.put("status", 0);
+	    		return h; 
+	    		
+        }else {
+	        
+	    		h.put("message", "coool");
+	    		h.put("status", 0);
+	    		h.put("user", user);
+        	
+        }
+		return h; 
+    }
 
 
 	

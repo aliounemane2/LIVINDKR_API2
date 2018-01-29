@@ -106,4 +106,5 @@ public class HelloController {
         }
         return new MessageResult();
     }
+
 }
