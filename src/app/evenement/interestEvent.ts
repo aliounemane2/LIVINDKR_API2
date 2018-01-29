@@ -1,1 +1,0 @@
-export class InterestEvent {   constructor(public idInterestsEvents: number, public heureDebut: string, public heureFin: string, public idInterest: number, public idEvent: number) {    }}

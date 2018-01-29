@@ -1,1 +1,0 @@
-export class Place {   constructor(public idPlace: string, public nomPlace: string, public adressePlace: string, public latitudePlace: string, public longitudePlace: string) {    }}
