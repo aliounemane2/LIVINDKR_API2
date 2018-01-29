@@ -150,9 +150,9 @@ public class InscriptionController {
         if(id == 0){
             EmailStatus emailStatus = sendEmail(password,email,TEMPLATEPASSWORD);
             if(emailStatus.isError()){
-                return new MessageResult("status", "2");
+                return new MessageResult(SecurityConstant.EREREUR_EMAIL1, "2");
             }
-            return new MessageResult("status", "1");
+            return new MessageResult(SecurityConstant.SEND_EMAIL, "1");
         }
         try {
             User user = userRepository.findByEmail(email);
@@ -162,7 +162,7 @@ public class InscriptionController {
             String passwordUpdate = getToken(password);
             user.setPassword(passwordEncoder.encode(passwordUpdate));
             userRepository.save(user);
-            return new MessageResult("status", "1");
+            return new MessageResult("status", "3");
         }catch (Exception e){
             System.out.print(e.getMessage());
         }
