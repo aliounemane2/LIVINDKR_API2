@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Event;
 import qualshore.livindkr.main.entities.Interest;
 import qualshore.livindkr.main.entities.InterestsEvents;
+import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.models.Interests_Events_Model;
 import qualshore.livindkr.main.repository.EventsRepository;
 import qualshore.livindkr.main.repository.InterestsEventsRepository;
@@ -39,7 +43,11 @@ public class InterestsEventsControllers {
 	@RequestMapping(value="/saveInterestsEvents", method = RequestMethod.POST)
 	public Map<String,Object> list_interests(@RequestBody Interests_Events_Model intEvM) {
 		HashMap<String, Object> h = new HashMap<String, Object>();
-		
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+		User idUser;
+		idUser = customUserDetails;
 		
 		Event event = new Event();
         InterestsEvents inter = new InterestsEvents();
@@ -50,7 +58,7 @@ public class InterestsEventsControllers {
         event.setIdInstitution(intEvM.getIdInstitution());
         event.setIdPlace(intEvM.getIdPlace());
         event.setIdCategory(intEvM.getIdCategory());
-        event.setIdUser(intEvM.getIdUser());
+        event.setIdUser(customUserDetails);
         evenRep.save(event);
         
         inter.setIdInterest(intEvM.getIdInterest());

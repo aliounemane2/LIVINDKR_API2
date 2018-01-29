@@ -95,8 +95,14 @@ public class HelloController {
         return map;
     }
     
-    @GetMapping("/redirect")
-    public MessageResult redirectloginInconrect () {
-    		return new MessageResult("1",SecurityConstant.LOGININCORRECT);
+    @GetMapping("/redirect/{id}")
+    public MessageResult redirectTo(@PathVariable("id") int id){
+        switch (id){
+            case 0: return new MessageResult("0",SecurityConstant.LOGININCORRECT);
+            case 1: return new MessageResult("1",SecurityConstant.TOKEN);
+            case 2: return new MessageResult("2",SecurityConstant.COMPTE_DESACTIVE);
+        }
+        return new MessageResult();
     }
+
 }

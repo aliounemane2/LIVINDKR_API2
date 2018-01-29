@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -42,9 +43,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		
 		String header = req.getHeader(SecurityConstant.HEADER_STRING);
 		if (header == null || !header.startsWith(SecurityConstant.TOKEN_PREFIX)) {
+			
+			//res.sendRedirect(getUrl(req).concat("/redirect/3"));
 			chain.doFilter(req, res);
 			return;
-		}
+		}else {
+			
+		
 		
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         if(authentication == null){
@@ -53,6 +58,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);
         }
+		}
+	}
+	
+	
+
+	@Override
+	protected void onUnsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException {
+		// TODO Auto-generated method stub
+		super.onUnsuccessfulAuthentication(request, response, failed);
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req) {
