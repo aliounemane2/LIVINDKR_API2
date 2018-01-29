@@ -46,7 +46,7 @@ public class EmailSender {
             MimeMessageHelper mail = new MimeMessageHelper(helper, true);
             mail.setTo(to);
             mail.setSubject(subject);
-            mail.setText(text);
+            mail.setText(text,isHtml);
             javaMailSender.send(helper);
             LOGGER.info("Send email '{}' to: {}", subject, to);
             return new EmailStatus(to, subject, text).success();

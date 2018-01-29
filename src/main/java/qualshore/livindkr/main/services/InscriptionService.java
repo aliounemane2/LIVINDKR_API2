@@ -16,6 +16,7 @@ import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.repository.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.awt.image.renderable.RenderableImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -31,7 +32,8 @@ import java.util.*;
 public class InscriptionService {
 
     public static final String TITLE  = "Liv'in Dakar";
-    public static final String TEMPLATE  = "templatemail.html";
+    public static final String TEMPLATE  = "templatemail";
+    public static final String TEMPLATEPASSWORD  = "templatepassword";
     private static List<MessageResult> results = new ArrayList<>();
 
     private BCryptPasswordEncoder passwordEncoder;
@@ -76,11 +78,12 @@ public class InscriptionService {
         return results;
     }
 
-    public Context sendMailConfirmation(User user){
+    public Context sendMailConfirmation(String token,String email){
         Context context = new Context();
-        context.setVariable("title", "Lorem Ipsum");
+        context.setVariable("title", "Validation compte");
         context.setVariable("description", "Lorem Lorem Lorem");
-        context.setVariable("lien", passwordEncoder.encode(user.getActivationToken().toString()));
+        context.setVariable("lien", token);
+        context.setVariable("email", email);
         return context;
     }
 

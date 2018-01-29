@@ -47,9 +47,7 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_user")
     private Integer idUser;
-    
-    
-    @Size(max = 6)
+
     @Column(name = "activationToken")
     private Integer activationToken;
     

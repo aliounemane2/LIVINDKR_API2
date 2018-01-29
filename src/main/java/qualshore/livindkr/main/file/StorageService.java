@@ -34,9 +34,9 @@ public class StorageService {
         String nomphoto = "";
         try {
             String type = file.getContentType().toLowerCase();
-                if(!(type.equals(IMG_JPEG) || type.equals(IMG_JPG) || type.equals(IMG_PNG))){
-                    return "0";
-                }
+            if(!(type.equals(IMG_JPEG) || type.equals(IMG_JPG) || type.equals(IMG_PNG))){
+                return "0";
+            }
 
             int taille = Integer.parseInt(String.valueOf(file.getOriginalFilename().length()));
             String extension = file.getOriginalFilename().substring(taille-4,taille);
