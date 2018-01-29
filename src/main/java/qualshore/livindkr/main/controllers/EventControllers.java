@@ -50,18 +50,19 @@ public class EventControllers {
 	
 	
 	@RequestMapping(value="/events_by_user/", method=RequestMethod.GET)
-	public HashMap<String, Object> getAllEventsByUser( User idUser){
+	public HashMap<String, Object> getAllEventsByUser( ){
 		
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
         // return "Hello livInDakr "+customUserDetails.getNom();
-        idUser = customUserDetails;
+        
+        // User idUser
 		
 		HashMap<String, Object> h= new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 
-		List<Event> event = eventsrepository.findEventByUser(idUser);
+		List<Event> event = eventsrepository.findEventByUser(customUserDetails);
 		
 		if (event==null) {
 			h.put("message", " Cet utilisateur n'a pas d'evenement.");
@@ -125,7 +126,6 @@ public class EventControllers {
 		event_user.setIdCategory(event.getIdCategory());
 		event_user.setIdInstitution(event.getIdInstitution());
 		event_user.setIdPlace(event.getIdPlace());
-		event_user.setIdUser(event.getIdUser());
 		
 		eventsrepository.saveAndFlush(event_user);		
 			
@@ -228,6 +228,14 @@ public class EventControllers {
 		InterestsEvents intEvent = new InterestsEvents();
 
 		
+		User idUser;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
+        
+        
+		
 		if(evenements == null){
 			
 			h.put("message", "paramètres vides.");
@@ -235,7 +243,7 @@ public class EventControllers {
 			return h;
 			
 		}else {
-			
+			evenements.setIdUser(idUser);
 			evenements = eventsrepository.save(evenements);
 			// intEventsRepository.save(interestsEvents);
 			
