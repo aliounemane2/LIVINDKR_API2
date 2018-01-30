@@ -73,10 +73,10 @@ public class HelloController {
     }
 
     @GetMapping("/redirect/{username}/{role}")
-    public Map<String, String> redirect(@PathVariable String username, @PathVariable String role, HttpServletResponse res, HttpServletRequest req){
+    public Map<String, Object> redirect(@PathVariable String username, @PathVariable String role, HttpServletResponse res, HttpServletRequest req){
 
         User user = userRepository.findByPseudo(username).get();
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         Claims claims = Jwts.claims().setSubject(user.getPseudo());
         CustomUserDetails details = new CustomUserDetails(user);
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -92,6 +92,7 @@ public class HelloController {
         res.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX + token);
         map.put("key",SecurityConstant.TOKEN_PREFIX + token);
         map.put("status","0");
+        map.put("user", user);
         user.setLastconnexion(new Date().toString());
         userRepository.save(user);
         return map;
