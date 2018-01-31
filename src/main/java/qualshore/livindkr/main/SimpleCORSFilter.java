@@ -38,7 +38,7 @@ public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
     response.setHeader("Access-Control-Max-Age", "3600");
     // response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me");
     response.setHeader("Access-Control-Allow-Headers", "Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    // response.setHeader("Access-Control-Allow-Headers", "*");// 
+    // response.setHeader("Access-Control-Allow-Headers", "*");//
     response.setHeader("Access-Control-Expose-Headers", "Access-Control-*, Origin, X-Requested-With, Content-Type, Accept, Authorization");
     chain.doFilter(req, res);
 }
@@ -50,7 +50,7 @@ public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 	@Override
 	public void destroy() {
 	}
-	
+
 	*/
 
 public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
