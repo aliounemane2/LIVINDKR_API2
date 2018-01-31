@@ -16,9 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import qualshore.livindkr.main.entities.CustomUserDetails;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-	
+
 	private AuthenticationManager authenticationManager;
-	
+
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager){
 		this.authenticationManager = authenticationManager;
 	}
@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>())
         );
 	}
-	
+
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
 		CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
@@ -40,6 +40,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		if(details.getIsActive() == false){
 			res.sendRedirect(getUrl(req).concat("/redirect/2"));
         }else {
+          res.addHeader("Access-Control-Allow-Origin","*");
+          res.setHeader("Access-Control-Allow-Origin","*");
     			res.sendRedirect(getUrl(req).concat("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom()));
         }
 	}
@@ -52,6 +54,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-		response.sendRedirect(getUrl(request).concat("/redirect/0"));
+
+      response.sendRedirect(getUrl(request).concat("/redirect/0"));
     }
 }

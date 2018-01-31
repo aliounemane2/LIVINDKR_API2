@@ -24,6 +24,7 @@ import java.util.*;
 /**
  * Created by Users on 03/01/2018.
  */
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class HelloController {
 
@@ -31,8 +32,8 @@ public class HelloController {
     private UserRepository userRepository;
     private UserRepository applicationUserRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    
-    
+
+
 
     public HelloController(UserRepository applicationUserRepository,
                           BCryptPasswordEncoder bCryptPasswordEncoder){
@@ -72,6 +73,7 @@ public class HelloController {
         return "access-denied";
     }
 
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/redirect/{username}/{role}")
     public Map<String, Object> redirect(@PathVariable String username, @PathVariable String role, HttpServletResponse res, HttpServletRequest req){
 

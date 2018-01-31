@@ -32,7 +32,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
     private ApplicationContext applicationContext;
 	private UserDetailsService userDetailsService;
 
-	
+
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -76,17 +76,17 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
 
         return viewResolver;
     }
-    
-    
+
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
     }
-    
-    
 
-    
+
+
+
     protected void configure(HttpSecurity http) throws Exception {
 
        http.cors()
@@ -99,8 +99,8 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/**").permitAll()
                 .antMatchers("/interests/list_interests").permitAll()
-                .antMatchers("/category/list_category").permitAll() // 
-                .antMatchers("/typeOffre/listTypeOffres/").permitAll() 
+                .antMatchers("/category/list_category").permitAll() //
+                .antMatchers("/typeOffre/listTypeOffres/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/fileupload").permitAll()
                 .antMatchers("/inscription").permitAll()
@@ -117,15 +117,15 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    
+
     @Bean
 	CorsConfigurationSource corsConfigurationSource() {
 	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("https://127.0.0.1:8088/**", new CorsConfiguration().applyPermitDefaultValues());
 	    return source;
 	}
-    
-    
+
+
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
 		//auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
