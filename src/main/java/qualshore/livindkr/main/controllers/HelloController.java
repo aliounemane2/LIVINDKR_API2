@@ -24,7 +24,8 @@ import java.util.*;
 /**
  * Created by Users on 03/01/2018.
  */
-@CrossOrigin(maxAge=3600)
+
+@CrossOrigin(allowedHeaders="*",allowCredentials="true")
 @RestController
 public class HelloController {
 
