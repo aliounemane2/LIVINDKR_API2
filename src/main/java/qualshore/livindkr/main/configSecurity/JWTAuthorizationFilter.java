@@ -40,19 +40,21 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 		//super.doFilterInternal(req, res, chain);
-		
+
 		String header = req.getHeader(SecurityConstant.HEADER_STRING);
 		if (header == null || !header.startsWith(SecurityConstant.TOKEN_PREFIX)) {
-			
+
 			//res.sendRedirect(getUrl(req).concat("/redirect/3"));
 			chain.doFilter(req, res);
 			return;
 		}else {
-			
-		
-		
+
+
+
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         if(authentication == null){
+          res.addHeader("Access-Control-Allow-Origin","*");
+          res.setHeader("Access-Control-Allow-Origin","*");
 			res.sendRedirect(getUrl(req).concat("/redirect/1"));
         }else{
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -60,8 +62,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
         }
 		}
 	}
-	
-	
+
+
 
 	@Override
 	protected void onUnsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,

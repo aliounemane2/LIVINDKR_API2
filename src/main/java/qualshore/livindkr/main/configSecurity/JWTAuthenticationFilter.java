@@ -36,12 +36,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
 		CustomUserDetails details = (CustomUserDetails) auth.getPrincipal();
-
+    res.addHeader("Access-Control-Allow-Origin","*");
+    res.setHeader("Access-Control-Allow-Origin","*");
 		if(details.getIsActive() == false){
 			res.sendRedirect(getUrl(req).concat("/redirect/2"));
         }else {
-          res.addHeader("Access-Control-Allow-Origin","*");
-          res.setHeader("Access-Control-Allow-Origin","*");
+
     			res.sendRedirect(getUrl(req).concat("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom()));
         }
 	}
@@ -54,7 +54,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-
+      response.addHeader("Access-Control-Allow-Origin","*");
+      response.setHeader("Access-Control-Allow-Origin","*");
       response.sendRedirect(getUrl(request).concat("/redirect/0"));
     }
 }
