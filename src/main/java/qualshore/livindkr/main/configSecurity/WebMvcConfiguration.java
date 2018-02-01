@@ -84,54 +84,11 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
     }
 
-
-
-
-    protected void configure(HttpSecurity http) throws Exception {
-
-       http.cors()
-    				//http
-                .and().csrf().disable()
-                .httpBasic().disable()
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/**").permitAll()
-                .antMatchers("/interests/list_interests").permitAll()
-                .antMatchers("/category/list_category").permitAll() //
-                .antMatchers("/typeOffre/listTypeOffres/").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/fileupload").permitAll()
-                .antMatchers("/inscription").permitAll()
-                .antMatchers("/sendEmail").permitAll()
-                .antMatchers("/redirect/**").permitAll()
-                .antMatchers("/secured/**").hasRole("ADMIN")
-                .antMatchers("/all").permitAll()
-                // .antMatchers("/all").hasRole("USER")
-                .anyRequest().authenticated()
-                //.and().exceptionHandling().accessDeniedHandler(securityHandler)
-                .and()
-                //.addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                //.addFilter(new JWTAuthorizationFilter(authenticationManager(),userRepository))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-
-
     @Bean
 	CorsConfigurationSource corsConfigurationSource() {
 	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    source.registerCorsConfiguration("https://127.0.0.1:8088/**", new CorsConfiguration().applyPermitDefaultValues());
 	    return source;
 	}
-
-
-	protected void configure(AuthenticationManagerBuilder auth)
-			throws Exception {
-		//auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-		//System.out.println(userDetailsService.toString());
-		auth.userDetailsService(userDetailsService);
-	}
-
 
 }
