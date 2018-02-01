@@ -100,6 +100,7 @@ public class HelloController {
         return map;
     }
 
+    @CrossOrigin("http://localhost:4200")
     @GetMapping("/redirect/{id}")
     public MessageResult redirectTo(@PathVariable("id") int id){
         switch (id){
