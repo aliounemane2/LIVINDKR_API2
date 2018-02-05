@@ -202,7 +202,7 @@ public class InstitutionControllers {
         idUser = customUserDetails;
 
 		
-		List<Institution>  institution = institutionrepository.findRecommandations(idUser);
+		List<Institution>  institution = institutionrepository.findRecommandations(idUser.getIdUser());
 		
 		if (institution.size() == 0) {
 			
