@@ -26,7 +26,7 @@ import static qualshore.livindkr.main.configSecurity.SecurityConstant.*;
 @Service
 public class StorageService {
     Logger log = LoggerFactory.getLogger(this.getClass().getName());
-    private final Path rootLocation = Paths.get("P:\\QualShore\\imageprofil");
+    private final Path rootLocation = Paths.get("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil");
 
     public String store(MultipartFile file, User user)
     {
@@ -43,7 +43,7 @@ public class StorageService {
 
             byte[] bytes = file.getBytes();
             nomphoto = user.getPseudo().concat(extension.toString());
-            File file1 = new File("P:\\QualShore\\imageprofil".concat("\\").concat(nomphoto));
+            File file1 = new File("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil".concat("\\").concat(nomphoto));
 
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
             stream.write(bytes);
