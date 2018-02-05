@@ -20,8 +20,8 @@ public interface InstitutionRepository extends JpaRepository<Institution, Intege
 	@Query("SELECT ins FROM Institution ins WHERE ins.idSousCategory = ?1 ") // AND note.idInstitution = ins.idInstitution
 	public List<Institution> findInstitutionBySousCategory(SousCategory idSousCategory);
 		
-	@Query("SELECT ins FROM Institution ins, User u, Interest i , UsersInterests ui WHERE u.idUser = ?1 AND ui.idUser =u.idUser AND ui.idInterests = i.idInterest AND i.idInterest = ins.interestIdInterest") //   AND ins.idUser = ?1    	
-	public List<Institution> findRecommandations(User idUser);
+	@Query("SELECT DISTINCT(ins) FROM Institution ins, User u, Interest i , UsersInterests ui WHERE u.idUser = ?1 AND ins.idUser.idUser = u.idUser AND  ui.idUser =u.idUser  AND i.idInterest = ui.idInterests") //AND ui.idInterests = i.idInterest   AND ins.idUser = ?1    	
+	public List<Institution> findRecommandations(Integer idUser);
 	
 	@Query("SELECT ins FROM Institution ins WHERE ins.idUser = ?1") //   AND ins.idUser = ?1    
 	public List<Institution> findInstitutionByUser(User idUser);

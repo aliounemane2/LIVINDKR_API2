@@ -15,6 +15,7 @@ import org.springframework.util.StreamUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -61,6 +62,10 @@ public class UserControllers {
 	
 	@Autowired
 	private Users_Interests_Repository userIntRepository;
+	
+	@Autowired
+	Environment env;
+
 	
 	
 	@Value("${dir.images}")
@@ -159,11 +164,14 @@ public class UserControllers {
         User idUser= customUserDetails;
         id = idUser.getIdUser();
         User user = userrepository.findByIdUser(id);
+		String location = env.getProperty("root.location.load");
 
+        
         if (user == null) {
 	        
         		h.put("message", "innexistant");
 	    		h.put("status", 0);
+			h.put("urls", "http://"+location);
 	    		return h; 
 	    		
         }else {
@@ -171,6 +179,8 @@ public class UserControllers {
 	    		h.put("message", "coool");
 	    		h.put("status", 0);
 	    		h.put("user", user);
+			h.put("urls", "http://"+location);
+
         	
         }
 		return h; 
