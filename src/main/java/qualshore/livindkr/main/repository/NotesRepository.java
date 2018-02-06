@@ -25,4 +25,7 @@ public interface NotesRepository extends JpaRepository<Note, Integer>{
 	@Query("SELECT note FROM Note note WHERE note.idUser = ?1 AND note.idInstitution= ?2")
 	public Note findInstitutionUser(User idUser, Institution idInstitution);
 	
+	
+	Note findByIdNote(Integer idnote);
+
 }

@@ -12,4 +12,7 @@ public interface MenuInstitutionRepository extends JpaRepository<InstitutionMenu
 	// @Query("SELECT im FROM InstitutionMenu im, Institution ins , Menu m WHERE im.idInstitution = ins.idInstitution AND im.idIMenu = m.idMenu And ins.idInstitution = ?1")
 	// public List<InstitutionMenu> findMenuByInstitution(Integer idInstitution);
 
+	
+	@Query("SELECT im FROM InstitutionMenu im, Institution ins , Menu m WHERE ins.idInstitution = ?1 AND im.idInstitution = ins.idInstitution AND im.idMenu = m.idMenu ")
+	public List<InstitutionMenu> findMenuByInstitution(Integer idInstitution);
 }
