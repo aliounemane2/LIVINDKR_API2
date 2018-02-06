@@ -44,5 +44,33 @@ public class ArticlesControllers {
 		
 		
 	}
+	
+	
+	@RequestMapping(value="/increments_articles/{id_articles}", method=RequestMethod.PUT)
+	public HashMap<String, Object> incrementsArticles(@PathVariable Integer id_articles){
+		
+		HashMap<String, Object> h= new HashMap<String, Object>();
+		
+		Article article = articlesrepository.findByIdArticle(id_articles);
+		
+		if (article == null) {
+			
+			h.put("message", "Il n'y a pas d'articles.");
+			h.put("status", -1);
+			return h;
+			
+		}else {
+			
+			
+			article.setNbLecteur(article.getNbLecteur()+1);
+			articlesrepository.saveAndFlush(article);
+			
+			h.put("message", "L'incrementation des articles est effectives :");
+			h.put("article", article);
+			h.put("status", 0);
+			return h;
+			
+		}
+	}
 
 }
