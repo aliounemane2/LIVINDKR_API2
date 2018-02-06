@@ -11,8 +11,12 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.concurrent.Executor;
 
 /*@SpringBootApplication
 public class LivindkrApplication {
@@ -24,14 +28,28 @@ public class LivindkrApplication {
 
 */
 
+
 @SpringBootApplication
+@EnableAsync
 public class LivindkrApplication extends SpringBootServletInitializer implements CommandLineRunner{
-    
+
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(LivindkrApplication.class);
     }
+
+    @Bean
+    public Executor asyncExecutor() {
+      ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+      executor.setCorePoolSize(2);
+      executor.setMaxPoolSize(2);
+      executor.setQueueCapacity(500);
+      executor.setThreadNamePrefix("EmailHtmlSender");
+      executor.initialize();
+      return executor;
+    }
+
     public static void main(String[] args) throws Exception {
         SpringApplication.run(LivindkrApplication.class, args);
     }
@@ -45,6 +63,7 @@ public class LivindkrApplication extends SpringBootServletInitializer implements
         /*fileStorageService.deleteAll();
         fileStorageService.init();*/
     }
+
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     CharacterEncodingFilter characterEncodingFilter() {
@@ -53,8 +72,7 @@ public class LivindkrApplication extends SpringBootServletInitializer implements
       filter.setForceEncoding(true);
       return filter;
     }
-    
-   
+
+
 }
 
-	

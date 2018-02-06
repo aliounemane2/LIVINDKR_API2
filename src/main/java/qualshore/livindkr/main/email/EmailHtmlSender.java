@@ -1,11 +1,14 @@
 package qualshore.livindkr.main.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by User on 10/01/2018.
@@ -24,10 +27,11 @@ public class EmailHtmlSender {
         this.templateEngine = engine;
     }
 
-    public EmailStatus send(String to, String subject, String templateName, Context context)
+    @Async
+    public CompletableFuture<EmailStatus> send(String to, String subject, String templateName, Context context) throws InterruptedException
     {
         String body = templateEngine.process(templateName, context);
-        return emailSender.sendHtml(to, subject, body);
+       return CompletableFuture.completedFuture(emailSender.sendHtml(to, subject, body));
     }
 
     public EmailStatus send(String to, String subject, String text)
