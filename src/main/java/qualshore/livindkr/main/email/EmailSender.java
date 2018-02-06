@@ -41,6 +41,9 @@ public class EmailSender {
     private EmailStatus sendM(String to, String subject, String text, Boolean isHtml) {
         try {
             System.setProperty("https.protocols", "TLS");
+
+            System.out.println("Sending email...");
+
             //SimpleMailMessage mail = new SimpleMailMessage();
             MimeMessage helper = javaMailSender.createMimeMessage();
             MimeMessageHelper mail = new MimeMessageHelper(helper, true);
