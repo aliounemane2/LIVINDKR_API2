@@ -26,7 +26,7 @@ import static qualshore.livindkr.main.configSecurity.SecurityConstant.*;
 @Service
 public class StorageService {
     Logger log = LoggerFactory.getLogger(this.getClass().getName());
-    private final Path rootLocation = Paths.get("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil");
+    private final Path rootLocation = Paths.get("P:\\Qualhore\\I\\LIV'INDKR\\PhotosProfil");
 
     public String store(MultipartFile file, User user)
     {
@@ -43,7 +43,7 @@ public class StorageService {
 
             byte[] bytes = file.getBytes();
             nomphoto = user.getPseudo().concat(extension.toString());
-            File file1 = new File("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil".concat("\\").concat(nomphoto));
+            File file1 = new File(("213.246.59.111/LIV'INDKR/PhotosProfil/").concat(nomphoto));
 
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
             stream.write(bytes);
@@ -74,10 +74,10 @@ public class StorageService {
     }
 
     public void init() {
-        try {
+        /*try {
             Files.createDirectory(rootLocation);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize storage!");
-        }
+        }*/
     }
 }
