@@ -75,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                  .antMatchers("/verifierPseudo/**").permitAll()
                 .antMatchers("/secured/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/all").permitAll()
+                .antMatchers("/updatePassword/**").permitAll()
                 // .antMatchers("/all").hasRole("USER")
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(securityHandler)

@@ -161,37 +161,10 @@ public class InscriptionController {
 
     @PostMapping("/updatePassword")
     public MessageResult updatePassword(@RequestParam("email") String email, @RequestParam("password") String password,
-                                        @RequestParam("id") int id, @RequestParam(name="oldpassword", required = false) String oldpassword,
+                                        @RequestParam( name= "id", required = false) int id, @RequestParam(name="oldpassword", required = false) String oldpassword,
                                         @RequestParam( name = "type", required = false) String type ){
         if(id == 0){
-          if(oldpassword != ""){
-            User user = userRepository.findByEmail(email);
-            if(user == null){
-              return new MessageResult("status", "0");
-            }
-
-            if(!passwordEncoder.matches(oldpassword,user.getPassword())){
-              return new MessageResult("Old password incorrecte", "4");
-            }
-
-            if(type != null && type.equals("mobile")){
-              user.setPassword(passwordEncoder.encode(password));
-              userRepository.save(user);
-              return new MessageResult("status", "1");
-            }
-          }
-
-          CompletableFuture<EmailStatus> future = serviceEmail.sendEmail(password,email,TEMPLATEPASSWORD,0,"");
-            try {
-              if(future.get().isError()){
-                  return new MessageResult(SecurityConstant.EREREUR_EMAIL1, "2");
-              }
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            } catch (ExecutionException e) {
-              e.printStackTrace();
-            }
-          return new MessageResult(SecurityConstant.SEND_EMAIL, "1");
+          return serviceEmail.updatepassword(email,oldpassword,password,type);
         }
         try {
             User user = userRepository.findByEmail(email);
