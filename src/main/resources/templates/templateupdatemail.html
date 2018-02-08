@@ -118,11 +118,11 @@
                 <div class="error-template">
                     <div class="error-details" style="margin: auto">
                         <section class="align-lg-center">
-                            <img src="static/logo-livindakar.png" class="align-lg-center" style="margin: auto" />
+                            <img src="/static/logo-livindakar.png" class="align-lg-center" style="margin: auto" />
                         </section>
                     </div>
                     <div class="error-actions">
-                        <a th:href="@{'http://localhost:4200/updatePassword/{email}/{token}'(email=${email},token=${lien})}" class="btn btn-theme-inverse btn-lg"> Cliquez ici pour valider la modification de votre mot de passe  </a>
+                        <a th:href="@{'http://localhost:4200/updateEmail/{token}/{email}/{email1}'(token=${lien}, email=${email},email1=${email1})}" class="btn btn-theme-inverse btn-lg"> Cliquez ici pour valider votre compte </a>
                     </div>
                 </div>
             </div>

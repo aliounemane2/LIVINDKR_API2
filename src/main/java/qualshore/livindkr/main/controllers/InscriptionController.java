@@ -20,6 +20,7 @@ import qualshore.livindkr.main.file.StorageService;
 import qualshore.livindkr.main.models.MessageResult;
 import qualshore.livindkr.main.repository.UserRepository;
 import qualshore.livindkr.main.services.InscriptionService;
+import qualshore.livindkr.main.services.ServiceEmail;
 import qualshore.livindkr.main.services.ServiceMessage;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -58,6 +59,9 @@ public class InscriptionController {
    @Autowired
    ServiceMessage message;
 
+  @Autowired
+  ServiceEmail serviceEmail;
+
     @PostMapping( name= "/inscription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MessageResult handleFileUpload(@RequestPart("user") User user, @RequestPart(name="file",required=false) MultipartFile file, @RequestParam(name = "type", required = false) Integer type ) {
 
@@ -71,11 +75,7 @@ public class InscriptionController {
             return results.get(0);
         }
         String map = storageService.store(file,user);
-        if(map.equals("") || map.equals("0")){
-            user.setPhoto("avatar_defaut.png");
-        }else{
-            user.setPhoto(map);
-        }
+        user.setPhoto(map.equals("") || map.equals("0") ? "avatar_defaut.png" : map);
 
         user.setIsActive(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -89,14 +89,12 @@ public class InscriptionController {
         }
 
         try {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(new Runnable() {
-              @Override
-              public void run() {
-                sendEmail(user.getActivationToken().toString(), user.getEmail(),TEMPLATE,type);
-              }
-            });
+           CompletableFuture<EmailStatus> future = serviceEmail.sendEmail(user.getActivationToken().toString(),user.getEmail(),TEMPLATE, type,"");
+            if(future.get().isError()){
+              return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
+            }
         } catch (Exception e) {
-          e.printStackTrace();
+              return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
         }
       /*
         if(sendEmail(user.getActivationToken().toString(), user.getEmail(),TEMPLATE,type).isError()){
@@ -106,22 +104,10 @@ public class InscriptionController {
         return new MessageResult("2",SecurityConstant.INSCRIPTIONMSM);
     }
 
-    private CompletableFuture<EmailStatus> sendEmail(String code,String email, String template, Integer type){
-        String token = type == 1 ? code : setToken(code);
-        Context context = service.sendMailConfirmation(token,email);
-        CompletableFuture<EmailStatus> emailStatus = null;
-          try {
-            emailStatus = emailHtmlSender.send(email,TITLE,template,context);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-      return emailStatus;
-    }
-
     @PostMapping("/ConfirmationEmail")
     public HashMap<String , Object> ConfirmationEmail(@RequestParam("code") String token, @RequestParam(name="type" , required = false) Integer type){
         try {
-            String token1 = type == 1 ? token : getToken(token);
+            String token1 = type == 1 ? token : serviceEmail.getToken(token);
             User user = userRepository.findByActivationToken(Integer.parseInt(token1));
             if(user != null){
                 user.setIsActive(true);
@@ -158,7 +144,7 @@ public class InscriptionController {
                     if(getUserByEmail.getIsActive() == true){
                         return new MessageResult("status", "4");
                     }
-                  CompletableFuture<EmailStatus> future = sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail(),TEMPLATE, type);
+                  CompletableFuture<EmailStatus> future = serviceEmail.sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail(),TEMPLATE, type,"");
 
                   //EmailStatus emailStatus = sendEmail(getUserByEmail.getActivationToken().toString(),getUserByEmail.getEmail(),TEMPLATE, type);
 
@@ -195,7 +181,7 @@ public class InscriptionController {
             }
           }
 
-          CompletableFuture<EmailStatus> future = sendEmail(password,email,TEMPLATEPASSWORD,0);
+          CompletableFuture<EmailStatus> future = serviceEmail.sendEmail(password,email,TEMPLATEPASSWORD,0,"");
             try {
               if(future.get().isError()){
                   return new MessageResult(SecurityConstant.EREREUR_EMAIL1, "2");
@@ -212,7 +198,7 @@ public class InscriptionController {
             if(user == null){
                 return new MessageResult("status", "0");
             }
-            String passwordUpdate = getToken(password);
+            String passwordUpdate = serviceEmail.getToken(password);
             user.setPassword(passwordEncoder.encode(passwordUpdate));
             userRepository.save(user);
             return new MessageResult("status", "3");
@@ -220,16 +206,5 @@ public class InscriptionController {
             System.out.print(e.getMessage());
         }
         return new MessageResult("status", "0");
-    }
-
-    private String setToken(String token){
-        return Jwts.builder().setSubject(token).signWith(SignatureAlgorithm.HS512, SecurityConstant.SECRETE.getBytes()).compact();
-    }
-
-    private String getToken(String token){
-        //return Jwts.parser().parsePlaintextJws(token.endsWith(".") ? token : token.concat(".")).toString();
-        return Jwts.parser().setSigningKey(SecurityConstant.SECRETE.getBytes())
-                .parseClaimsJws(token)
-                .getBody().getSubject();
     }
 }

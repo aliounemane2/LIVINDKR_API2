@@ -2,6 +2,8 @@ package qualshore.livindkr.main.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,16 @@ import static qualshore.livindkr.main.configSecurity.SecurityConstant.*;
 
 @Service
 public class StorageService {
+
+  @Autowired
+  Environment env;
+
     Logger log = LoggerFactory.getLogger(this.getClass().getName());
-    private final Path rootLocation = Paths.get("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil");
+    private final Path rootLocation = Paths.get("P:\\Qualhore\\I\\LIV'INDKR\\PhotosProfil");
 
     public String store(MultipartFile file, User user)
     {
+      String location = env.getProperty("root.location.storepp");
         HashMap<Integer, String> map = new HashMap<>();
         String nomphoto = "";
         try {
@@ -43,8 +50,8 @@ public class StorageService {
 
             byte[] bytes = file.getBytes();
             nomphoto = user.getPseudo().concat(extension.toString());
-            File file1 = new File("C:\\xampp\\htdocs\\LIV'INDKR\\PhotosProfil".concat("\\").concat(nomphoto));
-
+            File directory = new File("213.246.59.111\\LIVINDKR\\PhotosProfil");
+            File file1 = new File(directory , nomphoto);
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
             stream.write(bytes);
             stream.close();
@@ -74,10 +81,10 @@ public class StorageService {
     }
 
     public void init() {
-        try {
+        /*try {
             Files.createDirectory(rootLocation);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize storage!");
-        }
+        }*/
     }
 }
