@@ -28,6 +28,7 @@ import static qualshore.livindkr.main.services.InscriptionService.TITLE;
 /**
  * Created by User on 01/02/2018.
  */
+@RequestMapping("/user")
 @RestController
 public class EditUser {
 
@@ -101,10 +102,14 @@ public class EditUser {
     try {
       String token1 =  serviceEmail.getToken(code);
       User user = userRepository.findByActivationToken(Integer.parseInt(token1));
-      if(user != null && user.getEmail() == email1){
+      if(user != null && user.getEmail().equals(email1)){
         user.setEmail(email);
         userRepository.save(user);
         message.SetMessage("status", 0);
+        return message.getMessage();
+      }
+      if(user.getEmail().equals(email)){
+        message.SetMessage("status",2);
         return message.getMessage();
       }
       message.SetMessage("status",1);
