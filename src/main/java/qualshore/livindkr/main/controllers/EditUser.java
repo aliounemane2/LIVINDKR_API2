@@ -3,6 +3,7 @@ package qualshore.livindkr.main.controllers;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
@@ -20,10 +21,9 @@ import qualshore.livindkr.main.services.ServiceMessage;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-import static qualshore.livindkr.main.services.InscriptionService.TEMPLATE;
-import static qualshore.livindkr.main.services.InscriptionService.TEMPLATEUPDATEEMAIL;
-import static qualshore.livindkr.main.services.InscriptionService.TITLE;
+import static qualshore.livindkr.main.services.InscriptionService.*;
 
 /**
  * Created by User on 01/02/2018.
@@ -136,6 +136,13 @@ public class EditUser {
         message.SetMessage("status", 2);
       }
       return message.getMessage();
+  }
+
+  @PostMapping("/updatePassword")
+  public MessageResult updatePassword(@RequestParam("email") String email, @RequestParam("password") String password,
+                                      @RequestParam(name="oldpassword", required = false) String oldpassword,
+                                      @RequestParam( name = "type", required = false) String type ){
+      return serviceEmail.updatepassword(email, oldpassword,password, type);
   }
 
   public User getUser(String pseudo){
