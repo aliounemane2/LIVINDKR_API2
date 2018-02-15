@@ -40,8 +40,8 @@ public class User implements Serializable {
 
 
 	private static final long serialVersionUID = 1L;
-    
-    
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -50,98 +50,107 @@ public class User implements Serializable {
 
     @Column(name = "activationToken")
     private Integer activationToken;
-    
-    
+
+
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 75)
     @Column(name = "email")
     private String email;
-    
-    
+
+
     @Column(name = "is_active")
     private Boolean isActive;
-    
-    
 
-    
+
+
+
     @Size(max = 255)
     @Column(name = "lastconnexion")
     private String lastconnexion;
-    
+
     @Size(max = 130)
     @Column(name = "nom")
     private String nom;
-    
+
     @Size(max = 100)
     @Column(name = "password")
     private String password;
-    
+
     @Size(max = 80)
     @Column(name = "photo")
     private String photo;
-    
+
     @Size(max = 130)
     @Column(name = "prenom")
     private String prenom;
-    
+
     @Size(max = 45)
     @Column(name = "status")
     private String status;
-    
+
     @Size(max = 75)
     @Column(name = "telephone")
     private String telephone;
-    
+
     @Size(max = 255)
     @Column(name = "date_naissance")
     private String dateNaissance;
-    
+
     @Column(name = "is_dakar")
     private Boolean isDakar;
-    
-    
+
+
     @Size(max = 255)
     @Column(name = "pseudo")
     private String pseudo;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<Note> noteList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<UserEvent> userEventList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<Institution> institutionList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<Notification> notificationList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<UsersInterests> usersInterestsList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<Event> eventList;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
     @JsonIgnore
     private List<Commentaire> commentaireList;
-    
-    
-   
-    
+
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEnvoyeur")
+  @JsonIgnore
+  private List<Message> messagesEnvoye;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idReceveur")
+  @JsonIgnore
+  private List<Message> messagesRecus;
+
+
+
+
     @JoinColumn(name = "id_user_profil", referencedColumnName = "id_user_profil")
     @ManyToOne(optional = false)
     private UserProfil idUserProfil;
@@ -170,7 +179,7 @@ public class User implements Serializable {
 			List<Institution> institutionList, List<Notification> notificationList,
 			List<UsersInterests> usersInterestsList, List<Event> eventList, List<Commentaire> commentaireList
 			// ,UserProfil idUserProfil
-			
+
     		) {
 		super();
 		this.idUser = idUser;
@@ -413,9 +422,9 @@ public class User implements Serializable {
     public String toString() {
         return "qualshore.livindkr.main.entities.User[ idUser=" + idUser + " ]";
     }
-    
+
 	public UsersInterests addUsersInterests(Interest interest){
-		
+
 		UsersInterests uInterests = new UsersInterests();
 		uInterests.setInterest(interest);
 		uInterests.setIdInterests(interest.getIdInterest());
@@ -423,9 +432,9 @@ public class User implements Serializable {
 		uInterests.setIdUser(this.getIdUser());
 		this.getUsersInterestsList().add(uInterests);
 		interest.getUsersInterestsList().add(uInterests);
-		
+
 		return uInterests;
 	}
-	
-    
+
+
 }
