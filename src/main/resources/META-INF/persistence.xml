@@ -45,6 +45,7 @@
     <class>com.qualshore.livindakar.mapping1.Article</class>
     <class>com.qualshore.livindakar.mapping1.Vignette</class>
     <class>com.qualshore.livindakar.mapping1.Category</class>
+    <class>com.qualshore.livindakar.mapping1.Message</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>
