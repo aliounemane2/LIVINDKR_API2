@@ -147,8 +147,17 @@ public class User implements Serializable {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idReceveur")
   @JsonIgnore
   private List<Message> messagesRecus;
-
-
+  
+  
+  
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
+  @JsonIgnore
+  private List<Publicite> publiciteList;
+  
+  
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUser")
+  @JsonIgnore
+  private List<Article> articleList;
 
 
     @JoinColumn(name = "id_user_profil", referencedColumnName = "id_user_profil")
@@ -173,11 +182,29 @@ public class User implements Serializable {
         this.idUserProfil = user.getIdUserProfil();
     }
 
-    public User(Integer idUser, Integer activationToken, String email, Boolean isActive, String lastconnexion,
+    @XmlTransient
+    public List<Publicite> getPubliciteList() {
+		return publiciteList;
+	}
+
+	public void setPubliciteList(List<Publicite> publiciteList) {
+		this.publiciteList = publiciteList;
+	}
+    @XmlTransient
+	public List<Article> getArticleList() {
+		return articleList;
+	}
+
+	public void setArticleList(List<Article> articleList) {
+		this.articleList = articleList;
+	}
+
+	public User(Integer idUser, Integer activationToken, String email, Boolean isActive, String lastconnexion,
 			String nom, String password, String photo, String prenom, String status, String telephone,
 			String dateNaissance, Boolean isDakar, String pseudo, List<Note> noteList, List<UserEvent> userEventList,
 			List<Institution> institutionList, List<Notification> notificationList,
-			List<UsersInterests> usersInterestsList, List<Event> eventList, List<Commentaire> commentaireList
+			List<UsersInterests> usersInterestsList, List<Event> eventList, List<Commentaire> commentaireList, 
+			List<Article> articleList, List<Publicite> publiciteList
 			// ,UserProfil idUserProfil
 
     		) {
@@ -203,6 +230,8 @@ public class User implements Serializable {
 		this.usersInterestsList = usersInterestsList;
 		this.eventList = eventList;
 		this.commentaireList = commentaireList;
+		this.publiciteList=publiciteList;
+		this.articleList=articleList;
 		// this.idUserProfil = idUserProfil;
 	}
 

@@ -100,9 +100,6 @@ public class InstitutionControllers {
 		String location = env.getProperty("root.location.load");
 		
 
-      
-		
-		
 		if (institution==null || idInstitution==null) {
 			
 			h.put("status", -1);
