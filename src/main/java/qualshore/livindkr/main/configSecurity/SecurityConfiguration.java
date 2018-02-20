@@ -56,9 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-       http.cors()
-    				//http
-                .and().csrf().disable()
+       http.cors().and().csrf().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -76,6 +74,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/secured/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/updatePassword/**").permitAll()
+                .antMatchers("/chat/**").permitAll()
+                .antMatchers("/livindkr/**").permitAll()
+                .antMatchers("/app/**").permitAll()
                 // .antMatchers("/all").hasRole("USER")
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(securityHandler)

@@ -89,11 +89,14 @@ public class EditUser {
     }
 
     String map = storageService.store(file,user);
+    message.SetMessage("photo",user.getPhoto());
     if(!map.equals(user.getPhoto())){
       user.setPhoto(map.equals("") || map.equals("0") ? "avatar_defaut.png" : map);
+      message.SetMessage("photo",map);
       userRepository.save(user);
     }
     message.SetMessage("status","1");
+    
     return message.getMessage();
   }
 

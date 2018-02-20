@@ -23,7 +23,6 @@ import qualshore.livindkr.main.services.InscriptionService;
 import qualshore.livindkr.main.services.ServiceEmail;
 import qualshore.livindkr.main.services.ServiceMessage;
 
-import javax.servlet.annotation.MultipartConfig;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;

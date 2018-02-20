@@ -50,7 +50,7 @@ public class StorageService {
 
             byte[] bytes = file.getBytes();
             nomphoto = user.getPseudo().concat(extension.toString());
-            File directory = new File("213.246.59.111\\LIVINDKR\\PhotosProfil");
+            File directory = new File(location);
             File file1 = new File(directory , nomphoto);
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file1));
             stream.write(bytes);

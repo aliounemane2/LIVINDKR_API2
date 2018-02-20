@@ -1,9 +1,6 @@
 package qualshore.livindkr.main;
 
-import org.springframework.boot.SpringApplication;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -14,25 +11,36 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
-
-/*@SpringBootApplication
-public class LivindkrApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(LivindkrApplication.class, args);
-	}
-}
-
-*/
-
 
 @SpringBootApplication
 @EnableAsync
-public class LivindkrApplication extends SpringBootServletInitializer implements CommandLineRunner{
+public class LivindkrApplication extends SpringBootServletInitializer{
 
+    public static void main(String[] args) throws Exception {
+      SpringApplication.run(LivindkrApplication.class , args);
+    }
+
+  @Autowired
+  private WebSocketHandler webSocketHandler;
+/*
+  @Bean
+  public HandlerMapping webSocketHandlerMapping() {
+    Map<String, WebSocketHandler> map = new HashMap<>();
+    map.put("/chat/**", webSocketHandler);
+
+    SimpleUrlHandlerMapping handlerMapping = new SimpleUrlHandlerMapping();
+    handlerMapping.setOrder(1);
+    handlerMapping.setUrlMap(map);
+    return handlerMapping;
+  }*/
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
@@ -50,19 +58,6 @@ public class LivindkrApplication extends SpringBootServletInitializer implements
       return executor;
     }
 
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(LivindkrApplication.class, args);
-    }
-    /*
-    public static void main(String[] args) {
-        SpringApplication.run(ApiEtreasuryApplication.class, args);
-    }
-*/
-    @Override
-    public void run(String... arg0) throws Exception {
-        /*fileStorageService.deleteAll();
-        fileStorageService.init();*/
-    }
 
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -72,7 +67,5 @@ public class LivindkrApplication extends SpringBootServletInitializer implements
       filter.setForceEncoding(true);
       return filter;
     }
-
-
 }
 
