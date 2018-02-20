@@ -56,7 +56,20 @@ public class Interest implements Serializable {
     private String photoInterest;
     
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInterest")
+    @Size(max = 100)
+    @Column(name = "photo_interest2")
+    private String photoInterest2;
+    
+    
+    public String getPhotoInterest2() {
+		return photoInterest2;
+	}
+
+	public void setPhotoInterest2(String photoInterest2) {
+		this.photoInterest2 = photoInterest2;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "idInterest")
     @JsonIgnore
     private List<InterestsEvents> interestsEventsList;
     
