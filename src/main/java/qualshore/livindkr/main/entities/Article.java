@@ -62,13 +62,23 @@ public class Article implements Serializable {
     private int nbLecteur;
     
     
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_user")
-    private int idUser;
+    //@Basic(optional = false)
+    //@NotNull
+    //@Column(name = "id_user")
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @ManyToOne(optional = false)
+    private User idUser;
     
     
-    @Basic(optional = false)
+    public User getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(User idUser) {
+		this.idUser = idUser;
+	}
+
+	@Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "date_article")
@@ -102,8 +112,8 @@ public class Article implements Serializable {
     public Article(Integer idArticle) {
         this.idArticle = idArticle;
     }
-
-    public Article(Integer idArticle, String titreArticle, String contenuArticle, int nbLecteur, int idUser, String dateArticle, String image) {
+// int idUser,
+    public Article(Integer idArticle, String titreArticle, String contenuArticle, User idUser, int nbLecteur, String dateArticle, String image) {
         this.idArticle = idArticle;
         this.titreArticle = titreArticle;
         this.contenuArticle = contenuArticle;
@@ -144,7 +154,7 @@ public class Article implements Serializable {
     public void setNbLecteur(int nbLecteur) {
         this.nbLecteur = nbLecteur;
     }
-
+/*
     public int getIdUser() {
         return idUser;
     }
@@ -152,7 +162,7 @@ public class Article implements Serializable {
     public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
-
+*/
     public String getDateArticle() {
         return dateArticle;
     }
