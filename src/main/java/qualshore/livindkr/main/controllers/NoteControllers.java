@@ -130,4 +130,39 @@ public class NoteControllers {
 		
 	}
 	
+	
+	@RequestMapping(value="/update_note/{idnote}/{note}/{texte}/", method = RequestMethod.PUT)
+	public Map<String,Object> notes(@PathVariable Integer idnote, @PathVariable Integer note, @PathVariable String texte) {
+		
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		User idUser;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
+        
+        
+        Note notesss = noteRepository.findByIdNote(idnote);
+        notesss.setAvis(texte);
+        notesss.setNote(note);
+        noteRepository.saveAndFlush(notesss);
+		
+		if (notesss != null) {
+			
+			h.put("message", "L'utilisateur n'a pas de note pour cette institution.");
+			h.put("note", notesss);
+			h.put("status", -1);
+		}
+		
+		
+		
+		h.put("message", "La mise a jour est effective :");
+		h.put("note", notesss);
+		h.put("status", 0);
+
+		return h;	
+					
+	}
+	
+	
 }
