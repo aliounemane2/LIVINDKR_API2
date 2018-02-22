@@ -12,9 +12,12 @@ import qualshore.livindkr.main.entities.Message;
 import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.models.CustomUserDetails;
 import qualshore.livindkr.main.repository.DiscussionRepository;
+import qualshore.livindkr.main.repository.UserRepository;
 import qualshore.livindkr.main.services.ServiceUser;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -34,15 +37,20 @@ public class WebsocketInterceptor {
   DiscussionRepository discussionRepository;
 
   @Autowired
-  ServiceUser user;
+  UserRepository user;
+
 
   @MessageMapping("/chat.sendMessage")
-  @SendTo("/livindkr/public")
   public void onReceiveMessage(@Payload Message message){
-    CustomUserDetails user1 = user.getUserConnecter();
-    String urlUser = "/livindkr/basdia";
+    User user1 = getUser(message.getIdEnvoyeur().getIdUser());
+    String urlUser = "/livindkr/"+user1.getPseudo();
+    message.setDateMessage(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+    discussionRepository.save(message);
     this.template.convertAndSend(urlUser,message);
-    //return message;
+  }
+
+  public User getUser (int id){
+    return user.findByIdUser(id);
   }
 
   @MessageMapping("/initialize")
