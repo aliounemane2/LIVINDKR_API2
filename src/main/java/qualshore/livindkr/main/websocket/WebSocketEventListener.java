@@ -13,6 +13,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 /**
  * Created by User on 16/02/2018.
  */
+@Component
 public class WebSocketEventListener {
 
   private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);

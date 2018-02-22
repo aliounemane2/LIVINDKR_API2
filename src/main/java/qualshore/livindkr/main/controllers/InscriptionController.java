@@ -38,6 +38,7 @@ import static qualshore.livindkr.main.services.InscriptionService.*;
  */
 
 @RestController
+@RequestMapping("/inscription")
 public class InscriptionController {
 
     @Autowired

@@ -26,6 +26,7 @@ import java.util.*;
  */
 @CrossOrigin(maxAge = 3600)
 @RestController
+@RequestMapping("/livindkr")
 public class HelloController {
 
     @Autowired

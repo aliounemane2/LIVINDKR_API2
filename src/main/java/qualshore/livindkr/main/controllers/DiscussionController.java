@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
  */
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/discussion")
 public class DiscussionController {
 
   @Autowired
