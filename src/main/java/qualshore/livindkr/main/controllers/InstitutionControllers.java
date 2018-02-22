@@ -22,9 +22,13 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import qualshore.livindkr.main.entities.Category;
 import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Institution;
+import qualshore.livindkr.main.entities.InstitutionMenu;
+import qualshore.livindkr.main.entities.Menu;
 import qualshore.livindkr.main.entities.SousCategory;
 import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.repository.InstitutionRepository;
+import qualshore.livindkr.main.repository.MenuInstitutionRepository;
+import qualshore.livindkr.main.repository.MenuRepository;
 import qualshore.livindkr.main.services.ImageStorageService;
 
 // @CrossOrigin(maxAge=3600)
@@ -34,6 +38,14 @@ public class InstitutionControllers {
 	
 	@Autowired
 	private InstitutionRepository institutionrepository;
+	
+	
+	@Autowired
+	private 	MenuRepository menuRepository;
+	
+	
+	@Autowired
+	private 	MenuInstitutionRepository menuInstitutionRepository;
 	
 	
 	@Autowired
@@ -230,11 +242,10 @@ public class InstitutionControllers {
 
 	@RequestMapping(value="/saveInstitution/", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> saveInstitution(@RequestBody Institution institution) {
+	public Map<String,Object> saveInstitution(@RequestBody Institution institution, @RequestBody Menu menu, @RequestBody InstitutionMenu institutionMenu) {
 		
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
-		
 		
 		User idUser;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -242,24 +253,58 @@ public class InstitutionControllers {
         // return "Hello livInDakr "+customUserDetails.getNom();
         idUser = customUserDetails;
         
-		
-		if(institution == null){
+		/*if (menu == null) {
+			
+			h.put("message", "paramètres vides.");
+			h.put("status", -1);
+			return h;
+			
+		}else*/ 
+        
+        if (institution == null){
 			
 			h.put("message", "paramètres vides.");
 			h.put("status", -1);
 			return h;
 			
 		}else {
-			institution.setIdUser(idUser);
-			institution = institutionrepository.save(institution);
 			
-			h.put("message", "L'enregistrement des institutions est effective:");
-			h.put("institution", institution);
-			h.put("urls", "http://"+location);
-			h.put("status", 0);
-			return h;
+			if (menu != null) {
+				menuRepository.save(menu);
+				h.put("message", "L'enregistrement du menu est effective:");
+				h.put("menu", menu);
+				h.put("status", 0);
+				//return h;
+			}
 			
+			
+			
+			if (institution!= null ) {
+				institution.setIdUser(idUser);
+				institution = institutionrepository.save(institution);
+				
+				h.put("message", "L'enregistrement des institutions est effective:");
+				h.put("institution", institution);
+				h.put("urls", "http://"+location);
+				h.put("status", 0);
+				//return h;
+			}
+			
+			if (institutionMenu != null) {
+				institutionMenu.setIdMenu(institutionMenu.getIdMenu());
+				institutionMenu.setIdInstitution(institutionMenu.getIdInstitution());
+				menuInstitutionRepository.save(institutionMenu);
+				//institutionrepository.save(institutionMenu);
+				h.put("message", "L'enregistrement de l'institution Menu est effective:");
+				h.put("menuInstitution", institutionMenu);
+				h.put("status", 0);
+				//return h;
+			}
+
+			
+			return h;	
 		}
+		
 	}
 	
 	
@@ -422,7 +467,8 @@ public class InstitutionControllers {
 
 
 		HashMap<String, Object> img = imageInstitution.store(requests);
-		/*h.put("message", "L'enregistrement de l'image est effective.");
+		/*
+		h.put("message", "L'enregistrement de l'image est effective.");
 		h.put("image_events", img);
 		h.put("status", 0);
 		return h;
