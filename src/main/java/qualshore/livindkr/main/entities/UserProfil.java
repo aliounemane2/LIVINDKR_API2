@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Proxy;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = false)
 @Proxy(lazy = false)
 @XmlRootElement
-
 public class UserProfil implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,13 +42,14 @@ public class UserProfil implements Serializable {
     @Column(name = "id_user_profil")
     private Integer idUserProfil;
 
-    
+
     @Size(max = 120)
     @Column(name = "nom")
     private String nom;
-    
-    
+
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUserProfil")
+    @JsonIgnore
     private List<User> userList;
 
     public UserProfil() {
@@ -74,10 +75,8 @@ public class UserProfil implements Serializable {
         this.nom = nom;
     }
 
-    
-   /*
-     
-    @XmlTransient
+
+    //@XmlTransient
     public List<User> getUserList() {
         return userList;
     }
@@ -85,10 +84,6 @@ public class UserProfil implements Serializable {
     public void setUserList(List<User> userList) {
         this.userList = userList;
     }
-    
-    */
-    
-    
 
     @Override
     public int hashCode() {
@@ -114,5 +109,5 @@ public class UserProfil implements Serializable {
     public String toString() {
         return "qualshore.livindkr.main.entities.UserProfil[ idUserProfil=" + idUserProfil + " ]";
     }
-    
+
 }

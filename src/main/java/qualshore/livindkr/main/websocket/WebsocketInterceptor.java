@@ -42,15 +42,19 @@ public class WebsocketInterceptor {
 
   @MessageMapping("/chat.sendMessage")
   public void onReceiveMessage(@Payload Message message){
-    User user1 = getUser(message.getIdEnvoyeur().getIdUser());
+
+    User user1 = getUser(message.getIdEnvoyeur().getIdUser(), message.getIdReceveur().getIdUser());
     String urlUser = "/livindkr/"+user1.getPseudo();
+
     message.setDateMessage(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
     discussionRepository.save(message);
+
     this.template.convertAndSend(urlUser,message);
   }
 
-  public User getUser (int id){
-    return user.findByIdUser(id);
+  public User getUser (int idenvoyeur, int idreceveur){
+    User us = user.findByIdUser(idenvoyeur);
+    return us.getIdUserProfil().getNom().equals("ADMIN") ? us : user.findByIdUser(idreceveur);
   }
 
   @MessageMapping("/initialize")
