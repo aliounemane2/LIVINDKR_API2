@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 /**
  * Created by User on 19/02/2018.
  */
+
 public class CustomSubProtocolWebSocketHandler extends SubProtocolWebSocketHandler {
 
   private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(CustomSubProtocolWebSocketHandler.class);

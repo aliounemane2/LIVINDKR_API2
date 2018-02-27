@@ -30,7 +30,7 @@ public class Message {
   private String corps;
 
   @Column(name = "date_message")
-  private Date dateMessage;
+  private String dateMessage;
 
   @Column(name = "etat")
   private boolean etat;
@@ -62,11 +62,11 @@ public class Message {
     this.corps = corps;
   }
 
-  public Date getDateMessage() {
+  public String getDateMessage() {
     return dateMessage;
   }
 
-  public void setDateMessage(Date dateMessage) {
+  public void setDateMessage(String dateMessage) {
     this.dateMessage = dateMessage;
   }
 
