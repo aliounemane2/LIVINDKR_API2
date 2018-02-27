@@ -36,9 +36,8 @@ import static qualshore.livindkr.main.services.InscriptionService.*;
 /**
  * Created by User on 09/01/2018.
  */
-
+@RequestMapping("/register")
 @RestController
-@RequestMapping("/inscription")
 public class InscriptionController {
 
     @Autowired
@@ -62,7 +61,7 @@ public class InscriptionController {
   @Autowired
   ServiceEmail serviceEmail;
 
-    @PostMapping( name= "/inscription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(name="/inscription", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MessageResult handleFileUpload(@RequestPart("user") User user, @RequestPart(name="file",required=false) MultipartFile file, @RequestParam(name = "type", required = false) Integer type ) {
 
         if(user.equals(null)){

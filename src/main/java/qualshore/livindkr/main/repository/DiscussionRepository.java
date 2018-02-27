@@ -16,6 +16,6 @@ import java.util.concurrent.CompletableFuture;
 public interface DiscussionRepository extends JpaRepository<Message, Integer> {
 
   @Async
-  @Query("select m from Message m where m.idEnvoyeur.idUser=:id OR m.idReceveur.idUser=:id order by m.dateMessage asc")
-  CompletableFuture<List<Message>> findByIdEnvoyeur(@Param("id") Integer IdEnvoyeur);
+  @Query("select m from Message m where m.idEnvoyeur.idUser=:id OR m.idReceveur.idUser=:id order by m.dateMessage asc ")
+  CompletableFuture<List<Message>> findTopByIdEnvoyeur(@Param("id") Integer IdEnvoyeur);
 }

@@ -61,15 +61,6 @@ public class WebsocketInterceptor {
   @SendTo("/livindkr/public")
   public List<Message> onRegister(@Payload String message){
 
-    CompletableFuture<List<Message>> messages = discussionRepository.findByIdEnvoyeur(50);
-    try {
-      return messages.get();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    }
-
     return null;
   }
 

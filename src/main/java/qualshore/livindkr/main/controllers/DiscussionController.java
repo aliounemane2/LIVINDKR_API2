@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import qualshore.livindkr.main.entities.Message;
 import qualshore.livindkr.main.entities.User;
@@ -35,9 +36,9 @@ public class DiscussionController {
 
   @Description("L'obtention des messages envoyes et recus par un administrateur")
   @GetMapping("/mesMessage")
-  public List<Message> MesMessages() throws ExecutionException, InterruptedException {
+  public List<Message> MesMessages(@RequestParam("id") int id) throws ExecutionException, InterruptedException {
 
-    CompletableFuture<List<Message>> mesMessages = dr.findByIdEnvoyeur(50);
+    CompletableFuture<List<Message>> mesMessages = dr.findTopByIdEnvoyeur(id);
     return mesMessages.get();
   }
 

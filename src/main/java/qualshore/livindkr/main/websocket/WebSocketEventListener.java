@@ -23,23 +23,17 @@ public class WebSocketEventListener {
 
   @EventListener
   public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-    logger.info("Received a new web socket connection");
+    logger.info("Received a new web socket connection"+ event);
     System.out.print("Received a new web socket connection");
   }
 
-  /*@EventListener
+  @EventListener
   public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
     StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
     String username = (String) headerAccessor.getSessionAttributes().get("username");
     if(username != null) {
       logger.info("User Disconnected : " + username);
-
-      ChatMessage chatMessage = new ChatMessage();
-      chatMessage.setType(ChatMessage.MessageType.LEAVE);
-      chatMessage.setSender(username);
-
-      messagingTemplate.convertAndSend("/topic/public", chatMessage);
     }
-  }*/
+  }
 }

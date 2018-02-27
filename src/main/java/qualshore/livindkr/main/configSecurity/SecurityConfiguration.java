@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/typeOffre/listTypeOffres/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/fileupload").permitAll()
-                .antMatchers("/inscription/**").permitAll()
+                .antMatchers("/register/**").permitAll()
                 .antMatchers("/secured/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/chat/**").hasAnyRole("ADMIN", "SUPERADMIN")
