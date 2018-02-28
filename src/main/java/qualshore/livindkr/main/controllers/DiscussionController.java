@@ -11,6 +11,7 @@ import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.entities.UserProfil;
 import qualshore.livindkr.main.repository.DiscussionRepository;
 import qualshore.livindkr.main.repository.ProfilRepository;
+import qualshore.livindkr.main.repository.UserRepository;
 import qualshore.livindkr.main.services.ServiceUser;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class DiscussionController {
   @Autowired
   ProfilRepository profilRepository;
 
+  @Autowired
+  UserRepository userRepository;
+
   @Description("L'obtention des messages envoyes et recus par un administrateur")
   @GetMapping("/mesMessage")
   public List<Message> MesMessages(@RequestParam("id") int id) throws ExecutionException, InterruptedException {
@@ -47,5 +51,11 @@ public class DiscussionController {
   public List<User> getLesAdministrateurs(){
      UserProfil profil = profilRepository.findByNom("ADMIN");
      return profil != null ? profil.getUserList() : null;
+  }
+
+  @GetMapping("/superadmin")
+  public int getSuperAdmin(){
+    User user = userRepository.findByIdUserProfil_Nom("SUPERADMIN");
+    return user == null ? 0 : user.getIdUser();
   }
 }
