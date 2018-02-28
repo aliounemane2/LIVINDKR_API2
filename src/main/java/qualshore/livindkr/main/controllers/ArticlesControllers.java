@@ -114,7 +114,7 @@ public class ArticlesControllers {
 			
 		}else {
 			//article.setIdUser(idUser.getIdUser());
-			article.setIdCategory(null);
+			article.setIdCategory(article.getIdCategory());
 			article.setIdUser(idUser);
 
 
@@ -181,18 +181,51 @@ public class ArticlesControllers {
 			return h;
 			
 		}
-
 	}
 	
 	
-	@RequestMapping(value="/update_articles", method=RequestMethod.PUT)
+	
+	@RequestMapping(value="/getArticle/{idArticle}", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public HashMap<String, Object> updatearticles(@RequestBody Article article){
+	public HashMap<String, Object> GetOnearticles(@PathVariable Integer idArticle){
+		
+		HashMap<String, Object> h= new HashMap<String, Object>();
+		String location = env.getProperty("root.location.load");
+
+		User idUser;
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        idUser = customUserDetails;
+        
+        Article article = articlesrepository.findByIdArticle(idArticle);
+		if(article == null){
+			
+			h.put("message", "Pas d'articles disponibles.");
+			h.put("status", -1);
+			return h;
+			
+		}else {
+			
+			h.put("message", "L'ensemble des articles sont:");
+			h.put("article", article);
+			h.put("urls", "http://"+location);
+			h.put("status", 0);
+			return h;
+			
+		}
+	}
+	
+	
+	
+	@RequestMapping(value="/update_articles/{idArticle}", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public HashMap<String, Object> updatearticles(@PathVariable Integer idArticle,@RequestBody Article article){
 		
 		HashMap<String, Object> h= new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
         
-        Article articles = articlesrepository.findByIdArticle(article.getIdArticle());
+        Article articles = articlesrepository.findByIdArticle(idArticle);
         
         articles.setTitreArticle(article.getTitreArticle());
         articles.setIdTagDecouverte(article.getIdTagDecouverte());
@@ -210,7 +243,7 @@ public class ArticlesControllers {
 	
 	
 	@CrossOrigin
-	@RequestMapping(value="/delete_article/{idInstitution}", method = RequestMethod.DELETE)
+	@RequestMapping(value="/delete_article/{idArticle}", method = RequestMethod.DELETE)
 	public Map<String,Object> delete_institution(@PathVariable Integer idArticle) {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 

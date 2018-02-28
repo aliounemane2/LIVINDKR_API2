@@ -58,4 +58,5 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       response.setHeader("Access-Control-Allow-Origin","*");
       response.sendRedirect(getUrl(request).concat("/livindkr/redirect/0"));
     }
+    
 }

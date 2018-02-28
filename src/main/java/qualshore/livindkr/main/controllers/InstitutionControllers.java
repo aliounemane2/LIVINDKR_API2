@@ -463,9 +463,7 @@ public class InstitutionControllers {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		
 		// JSONObject item = new JSONObject();
-        
-
-
+       
 		HashMap<String, Object> img = imageInstitution.store(requests);
 		/*
 		h.put("message", "L'enregistrement de l'image est effective.");
@@ -473,8 +471,6 @@ public class InstitutionControllers {
 		h.put("status", 0);
 		return h;
 		*/
-		
-		
         return img;
 		
 	}

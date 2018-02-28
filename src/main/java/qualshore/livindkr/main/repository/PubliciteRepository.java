@@ -15,5 +15,14 @@ public interface PubliciteRepository extends JpaRepository<Publicite, Integer>{
 	
 	@Query("SELECT pb FROM Publicite pb WHERE pb.idPublicite = ?1")
 	public Publicite findByIdPublicite(Integer idPublicite);
+	
+	@Query("SELECT pb FROM Publicite pb WHERE pb.typePublicite = 'Accueil' ORDER BY datePublicite DESC")
+	public List<Publicite> findPubliciteByAccueil();
+	
+	@Query("SELECT pb FROM Publicite pb WHERE pb.typePublicite = 'Article' ORDER BY datePublicite DESC")
+	public List<Publicite> findPubliciteByArticle();
+	
+	@Query("SELECT pb FROM Publicite pb WHERE pb.typePublicite = 'Carroussel' ORDER BY datePublicite DESC")
+	public List<Publicite> findPubliciteByCarroussel();
 
 }

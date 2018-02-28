@@ -41,23 +41,23 @@ public class Article implements Serializable {
     private Integer idArticle;
     
     
-    @Basic(optional = false)
-    @NotNull
+    // @Basic(optional = false)
+    //@NotNull
     @Size(min = 1, max = 255)
     @Column(name = "titre_article")
     private String titreArticle;
     
     
-    @Basic(optional = false)
-    @NotNull
-    @Lob
+    //@Basic(optional = false)
+    //@NotNull
+    //@Lob
     @Size(min = 1, max = 2147483647)
     @Column(name = "contenu_article")
     private String contenuArticle;
     
     
-    @Basic(optional = false)
-    @NotNull
+    //@Basic(optional = false)
+    //@NotNull
     @Column(name = "nb_lecteur")
     private int nbLecteur;
     
@@ -78,8 +78,8 @@ public class Article implements Serializable {
 		this.idUser = idUser;
 	}
 
-	@Basic(optional = false)
-    @NotNull
+	//@Basic(optional = false)
+    //@NotNull
     @Size(min = 1, max = 30)
     @Column(name = "date_article")
     private String dateArticle;
@@ -113,6 +113,7 @@ public class Article implements Serializable {
         this.idArticle = idArticle;
     }
 // int idUser,
+    
     public Article(Integer idArticle, String titreArticle, String contenuArticle, User idUser, int nbLecteur, String dateArticle, String image) {
         this.idArticle = idArticle;
         this.titreArticle = titreArticle;

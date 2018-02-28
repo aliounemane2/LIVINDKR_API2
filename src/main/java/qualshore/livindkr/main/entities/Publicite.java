@@ -36,8 +36,8 @@ public class Publicite implements Serializable {
     @Column(name = "id_publicite")
     private Integer idPublicite;
     
-    @Basic(optional = false)
-    @NotNull
+    //@Basic(optional = false)
+    //@NotNull
     @Size(min = 1, max = 255)
     @Column(name = "titre_publicite")
     private String titrePublicite;
@@ -48,15 +48,15 @@ public class Publicite implements Serializable {
     private Date datePublicite;
 
     
-    @Basic(optional = false)
-    @NotNull
+   // @Basic(optional = false)
+    //@NotNull
     @Size(min = 1, max = 255)
     @Column(name = "typepublicite")
     private String typePublicite;
 
     
-    @Basic(optional = false)
-    @NotNull
+    //@Basic(optional = false)
+    //@NotNull
     @Size(min = 1, max = 255)
     @Column(name = "photopublicite")
     private String photoPublicite;
