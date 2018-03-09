@@ -39,10 +39,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     res.addHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-Origin","*");
 		if(details.getIsActive() == false){
-			res.sendRedirect(getUrl(req).concat("/redirect/2"));
+			res.sendRedirect(getUrl(req).concat("/livindkr/redirect/2"));
         }else {
 
-    			res.sendRedirect(getUrl(req).concat("/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom()));
+    			res.sendRedirect(getUrl(req).concat("/livindkr/redirect/"+details.getPseudo()+"/"+details.getIdUserProfil().getNom()));
         }
 	}
 
@@ -56,7 +56,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
       response.addHeader("Access-Control-Allow-Origin","*");
       response.setHeader("Access-Control-Allow-Origin","*");
-      response.sendRedirect(getUrl(request).concat("/redirect/0"));
+      response.sendRedirect(getUrl(request).concat("/livindkr/redirect/0"));
     }
     
 }

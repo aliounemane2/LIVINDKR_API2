@@ -44,17 +44,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		String header = req.getHeader(SecurityConstant.HEADER_STRING);
 		if (header == null || !header.startsWith(SecurityConstant.TOKEN_PREFIX)) {
 			//res.sendRedirect(getUrl(req).concat("/redirect/3"));
-			chain.doFilter(req, res);
+			//chain.doFilter(req, res);
+      super.doFilterInternal(req, res, chain);
 			return;
 		}else {
-
 
 
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
         if(authentication == null){
           res.addHeader("Access-Control-Allow-Origin","*");
           res.setHeader("Access-Control-Allow-Origin","*");
-			res.sendRedirect(getUrl(req).concat("/redirect/1"));
+			res.sendRedirect(getUrl(req).concat("/livindkr/redirect/1"));
         }else{
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(req, res);
