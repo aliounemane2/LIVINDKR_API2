@@ -48,7 +48,7 @@ public class Institution implements Serializable {
     private Integer idInstitution;
     
     
-    @Size(max = 100)
+    // @Size(max = 100)
     @Column(name = "adresse_ins")
     private String adresseIns;
     
@@ -62,19 +62,19 @@ public class Institution implements Serializable {
     private Float longitudeIns;
     
     
-    @Size(max = 100)
+    // @Size(max = 100)
     @Column(name = "nom_ins")
     private String nomIns;
     
    
  
     
-    @Size(max = 255)
+    //@Size(max = 255)
     @Column(name = "photo_ins")
     private String photoIns;
     
     
-    @Size(max = 50)
+    //@Size(max = 50)
     @Column(name = "telephone_ins")
     private String telephoneIns;
     
@@ -82,14 +82,14 @@ public class Institution implements Serializable {
     // @Basic(optional = false)
     // @NotNull
     // @Lob
-    @Size(min = 1, max = 2147483647)
+    //@Size(min = 1, max = 2147483647)
     @Column(name = "description_ins")
     private String descriptionIns;
     
     
-    @Basic(optional = false)
+    //@Basic(optional = false)
     // @NotNull
-    @Size(min = 1, max = 20)
+   // @Size(min = 1, max = 20)
     @Column(name = "solde")
     private String solde;
     
@@ -97,7 +97,7 @@ public class Institution implements Serializable {
     
     // @Basic(optional = false)
     // @NotNull
-    @Size(min = 1, max = 10)
+    //@Size(min = 1, max = 10)
     @Column(name = "price")
     private String price;
     

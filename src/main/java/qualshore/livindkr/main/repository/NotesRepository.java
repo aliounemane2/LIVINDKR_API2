@@ -2,7 +2,10 @@ package qualshore.livindkr.main.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import qualshore.livindkr.main.entities.Institution;
@@ -24,6 +27,11 @@ public interface NotesRepository extends JpaRepository<Note, Integer>{
 	
 	@Query("SELECT note FROM Note note WHERE note.idUser = ?1 AND note.idInstitution= ?2")
 	public Note findInstitutionUser(User idUser, Institution idInstitution);
+	
+	@Transactional
+	@Modifying
+	@Query("DELETE FROM Note WHERE idInstitution = ?1")
+	void deleteNoteByInstitution(Institution idInstitution);
 	
 	
 	Note findByIdNote(Integer idnote);

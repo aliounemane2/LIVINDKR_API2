@@ -220,7 +220,7 @@ public class ArticlesControllers {
 	
 	@RequestMapping(value="/update_articles/{idArticle}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
-	public HashMap<String, Object> updatearticles(@PathVariable Integer idArticle,@RequestBody Article article){
+	public HashMap<String, Object> updatearticles(@PathVariable Integer idArticle, @RequestBody Article article){
 		
 		HashMap<String, Object> h= new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");

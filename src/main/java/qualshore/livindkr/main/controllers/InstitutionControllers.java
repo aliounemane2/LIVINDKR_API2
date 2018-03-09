@@ -24,11 +24,14 @@ import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Institution;
 import qualshore.livindkr.main.entities.InstitutionMenu;
 import qualshore.livindkr.main.entities.Menu;
+import qualshore.livindkr.main.entities.Note;
 import qualshore.livindkr.main.entities.SousCategory;
 import qualshore.livindkr.main.entities.User;
+import qualshore.livindkr.main.repository.EventsRepository;
 import qualshore.livindkr.main.repository.InstitutionRepository;
 import qualshore.livindkr.main.repository.MenuInstitutionRepository;
 import qualshore.livindkr.main.repository.MenuRepository;
+import qualshore.livindkr.main.repository.NotesRepository;
 import qualshore.livindkr.main.services.ImageStorageService;
 
 // @CrossOrigin(maxAge=3600)
@@ -53,6 +56,13 @@ public class InstitutionControllers {
 	
 	@Autowired
 	private ImageStorageService imageInstitution;
+	
+	
+	@Autowired
+	private NotesRepository noteRepository;
+	
+	@Autowired
+	private EventsRepository evRepository;
 	
 
 	
@@ -157,15 +167,32 @@ public class InstitutionControllers {
 
 			Institution institution = institutionrepository.findByIdInstitution(idInstitution);
 			
+			
 			if (institution==null) {
+				
 				h.put("message", "Cette institution n'existe pas.");
 				h.put("status", 0);
 				
 			}else {
+				/*
+				if (notess != null ) {
+					noteRepository.delete(idInstitution);
+					institutionrepository.delete(institution);
+					h.put("message", "La Suppression de la note de l'institution est effective.");
+					h.put("status", 0);
+				*/
+				// noteRepository.delete(idInstitution);
 				
-				institutionrepository.delete(institution);
-				h.put("message", "La Suppression de l'institution est effective.");
-				h.put("status", 0);
+				
+				
+					//deleteEventByInstitution
+				
+					evRepository.deleteEventByInstitution(institution);
+					noteRepository.deleteNoteByInstitution(institution);
+					institutionrepository.delete(institution);
+					h.put("message", "La Suppression de l'institution est effective.");
+					h.put("status", 0);
+				// }
 			}
 			
 			return h;
@@ -242,8 +269,9 @@ public class InstitutionControllers {
 
 	@RequestMapping(value="/saveInstitution/", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public Map<String,Object> saveInstitution(@RequestBody Institution institution, @RequestBody Menu menu, @RequestBody InstitutionMenu institutionMenu) {
-		
+	//public Map<String,Object> saveInstitution(@RequestBody Institution institution, @RequestBody Menu menu, @RequestBody InstitutionMenu institutionMenu) {
+	public Map<String,Object> saveInstitution(@RequestBody Institution institution) {
+	
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 		
@@ -268,7 +296,7 @@ public class InstitutionControllers {
 			return h;
 			
 		}else {
-			
+			/*
 			if (menu != null) {
 				menuRepository.save(menu);
 				h.put("message", "L'enregistrement du menu est effective:");
@@ -276,6 +304,7 @@ public class InstitutionControllers {
 				h.put("status", 0);
 				//return h;
 			}
+			*/
 			
 			
 			
@@ -289,7 +318,7 @@ public class InstitutionControllers {
 				h.put("status", 0);
 				//return h;
 			}
-			
+			/*
 			if (institutionMenu != null) {
 				institutionMenu.setIdMenu(institutionMenu.getIdMenu());
 				institutionMenu.setIdInstitution(institutionMenu.getIdInstitution());
@@ -300,6 +329,7 @@ public class InstitutionControllers {
 				h.put("status", 0);
 				//return h;
 			}
+			*/
 
 			
 			return h;	

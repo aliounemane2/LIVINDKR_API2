@@ -81,6 +81,39 @@ public class EventControllers {
 	
 	
 	
+	
+	@RequestMapping(value="/events_by_user_after/", method=RequestMethod.GET)
+	public HashMap<String, Object> getAllEventsByUserOrder( ){
+		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+        // return "Hello livInDakr "+customUserDetails.getNom();
+        
+        // User idUser
+		
+		HashMap<String, Object> h= new HashMap<String, Object>();
+		String location = env.getProperty("root.location.load");
+
+		List<Event> event = eventsrepository.findEventByUserAfter(customUserDetails);
+		
+		if (event==null) {
+			h.put("message", " Cet utilisateur n'a pas d'evenement.");
+			h.put("status", -1);
+			return h;
+
+		}
+			
+			h.put("message", "Les evenements de l'utilisateur sont : ");
+			h.put("events", event);
+			h.put("status", 0);
+			h.put("urls", "http://"+location);
+			return h;	
+	
+	}
+	
+	
+	
 	@RequestMapping(value="/getEvent/{idEvent}", method = RequestMethod.GET)
 	public Map<String,Object> getOneEvent(@PathVariable Integer idEvent) {
 		HashMap<String, Object> h = new HashMap<String, Object>();

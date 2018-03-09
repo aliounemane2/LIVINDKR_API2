@@ -141,7 +141,6 @@ public class ImageStorageService {
     			// JSONObject item = new JSONObject();
             // item.put("message", name);
             // message = item.toString();
-    		
         try
         {
             String location = env.getProperty("root.location.store");
@@ -162,9 +161,6 @@ public class ImageStorageService {
                 stream.write(file.getBytes());
                 stream.close();
                 name = serverFile.getName();
-                
-                
-                
 
                 message = name;
                 h.put("message", message);
@@ -195,15 +191,6 @@ public class ImageStorageService {
             h.put("sss",message);
             return h;
         }
-
-        
-        
-        
-        
-           
-
-            
-            
 
             // Path rootLocation = getRootDocument(document, location);
             // String [] originalName = file.getOriginalFilename().split("\\.pdf");
