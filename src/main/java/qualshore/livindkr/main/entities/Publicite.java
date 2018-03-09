@@ -43,9 +43,9 @@ public class Publicite implements Serializable {
     private String titrePublicite;
     
     
-	@JsonFormat(pattern = "YYYY-MM-dd")
+	// @JsonFormat(pattern = "YYYY-MM-dd")
     @Column(name = "datepublicite")
-    private Date datePublicite;
+    private String datePublicite;
 
     
    // @Basic(optional = false)
@@ -86,12 +86,12 @@ public class Publicite implements Serializable {
 	}
 
 
-	public Date getDatePublicite() {
+	public String getDatePublicite() {
 		return datePublicite;
 	}
 
 
-	public void setDatePublicite(Date datePublicite) {
+	public void setDatePublicite(String datePublicite) {
 		this.datePublicite = datePublicite;
 	}
 
@@ -111,7 +111,7 @@ public class Publicite implements Serializable {
 	}
 
 
-	public Publicite(Integer idPublicite, String titrePublicite, Date datePublicite, String typePublicite,String photoPublicite, User idUser) {
+	public Publicite(Integer idPublicite, String titrePublicite, String datePublicite, String typePublicite,String photoPublicite, User idUser) {
 		super();
 		this.idPublicite = idPublicite;
 		this.titrePublicite = titrePublicite;
