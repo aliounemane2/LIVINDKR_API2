@@ -13,8 +13,12 @@ import qualshore.livindkr.main.entities.UsersInterests;
 public interface Users_Interests_Repository extends JpaRepository<UsersInterests, Integer> {
 	
 	public UsersInterests findByIdUsersInterests(Integer user_interest);
-	public List<UsersInterests> findByIdInterests(Interest interest);
-	public List<UsersInterests> findByIdUser(Integer user); 
+	public List<UsersInterests> findByIdInterests(Interest interest);	
+	public List<UsersInterests> findByIdUser(Integer user);
+	
+	@Query("SELECT ui FROM UsersInterests ui, User u, Interest i  WHERE i.idInterest= ?1 AND ui.idUser=u.idUser AND ui.idInterests=?1") 
+	public List<UsersInterests> findByIdInterestsss(Integer idinterest);	
+
 	
 	@Query("SELECT ui FROM UsersInterests ui, User u, Interest i  WHERE ui.idUser = ?1 AND ui.idUser=u.idUser AND ui.idInterests=i.idInterest") 
     public List<UsersInterests> findByInterestByUser(Integer idUser);

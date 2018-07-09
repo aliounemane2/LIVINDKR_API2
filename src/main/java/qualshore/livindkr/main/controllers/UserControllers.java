@@ -20,6 +20,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -65,6 +67,11 @@ public class UserControllers {
 	
 	@Autowired
 	Environment env;
+	
+	@Autowired
+    public JavaMailSender emailSender;
+ 
+
 
 	
 	
@@ -150,6 +157,29 @@ public class UserControllers {
 			}
 	}
 	
+	@RequestMapping(value = "/contacter/{to}/{subject}/{text}", method = RequestMethod.GET)
+    public HashMap<String, Object> Contacter(@PathVariable String to,@PathVariable  String subject, @PathVariable String text) {
+		HashMap<String, Object> h= new HashMap<String, Object>();
+			System.out.println(to);
+			System.out.println(subject);
+			System.out.println(text);
+    	      	
+			if ((to== null ) || (to== null ) || (to== null )){
+				h.put("message", "mail non envoyeeee2");
+		    		h.put("status", -1);
+		    		return h; 
+			}
+    	        SimpleMailMessage message = new SimpleMailMessage(); 
+    	        message.setTo("roussibadiakhate@gmail.com"); 
+    	        message.setFrom(to); 
+    	        message.setSubject(subject); 
+    	        message.setText(text);
+    	        emailSender.send(message);
+    	        
+    	        h.put("message", "mail envoyeeee2");
+	    		h.put("status", 0);
+	    		return h; 
+    	    }
 	
 	
 	

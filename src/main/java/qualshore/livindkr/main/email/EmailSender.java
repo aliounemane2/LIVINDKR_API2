@@ -51,10 +51,13 @@ public class EmailSender {
             mail.setSubject(subject);
             mail.setText(text,isHtml);
             javaMailSender.send(helper);
-            LOGGER.info("Send email '{}' to: {}", subject, to);
+            LOGGER.info("Send email '{}' to: {} {} ", subject, to);
+            // return new EmailStatus(to, subject, text).success();
             return new EmailStatus(to, subject, text).success();
+            //return to;
+
         } catch (Exception e) {
-            LOGGER.error(String.format("Problem with sending email to: {}, error message: {}", to, e.getMessage()));
+            LOGGER.error(String.format("Problem with sending email to: {}, error message: {}  ", to, e.getMessage()));
             return new EmailStatus(to, subject, text).error(e.getMessage());
         }
     }

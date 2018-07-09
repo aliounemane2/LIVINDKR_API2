@@ -17,6 +17,10 @@ public interface InstitutionRepository extends JpaRepository<Institution, Intege
 	@Query("SELECT ins FROM Institution ins WHERE ins.idCategory = ?1 ")
 	public List<Institution> findInstitutionByCategory(Category idCategory);
 	
+	
+	@Query("SELECT ins FROM Institution ins WHERE ins.idInstitution = ?1 ")
+	public Institution findUserByInstitutionsss(Integer idInstitution);
+	
 	@Query("SELECT ins FROM Institution ins WHERE ins.idSousCategory = ?1 ") // AND note.idInstitution = ins.idInstitution
 	public List<Institution> findInstitutionBySousCategory(SousCategory idSousCategory);
 		

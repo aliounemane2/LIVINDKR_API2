@@ -122,7 +122,8 @@
                         </section>
                     </div>
                     <div class="error-actions">
-                        <a th:href="@{'http://localhost:4200/sendemail/{token}'(token=${lien})}" class="btn btn-theme-inverse btn-lg"> Cliquez ici pour valider votre compte </a>
+                    		Votre code de validation est : <p th:text="${lien}"></p>
+                        <a th:href="@{'http://213.246.59.111:4202/sendemail/{token}'(token=${lien})}" class="btn btn-theme-inverse btn-lg"> Cliquez ici pour valider votre compte </a>
                     </div>
                 </div>
             </div>

@@ -61,7 +61,8 @@ public class User implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
 
-
+    @Column(name = "fcmtoken")
+    private String fcmToken;
 
 
     @Size(max = 255)
@@ -179,10 +180,19 @@ public class User implements Serializable {
         this.dateNaissance = user.dateNaissance;
         this.isDakar = user.isDakar;
         this.pseudo = user.pseudo;
+        this.fcmToken=user.fcmToken;
         this.idUserProfil = user.getIdUserProfil();
     }
 
-    @XmlTransient
+    public String getFcmToken() {
+		return fcmToken;
+	}
+
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
+	}
+
+	@XmlTransient
     public List<Publicite> getPubliciteList() {
 		return publiciteList;
 	}
@@ -201,7 +211,7 @@ public class User implements Serializable {
 
 	public User(Integer idUser, Integer activationToken, String email, Boolean isActive, String lastconnexion,
 			String nom, String password, String photo, String prenom, String status, String telephone,
-			String dateNaissance, Boolean isDakar, String pseudo, List<Note> noteList, List<UserEvent> userEventList,
+			String dateNaissance, Boolean isDakar, String pseudo, String fcmToken, List<Note> noteList, List<UserEvent> userEventList,
 			List<Institution> institutionList, List<Notification> notificationList,
 			List<UsersInterests> usersInterestsList, List<Event> eventList, List<Commentaire> commentaireList, 
 			List<Article> articleList, List<Publicite> publiciteList
@@ -223,6 +233,7 @@ public class User implements Serializable {
 		this.dateNaissance = dateNaissance;
 		this.isDakar = isDakar;
 		this.pseudo = pseudo;
+		this.fcmToken=fcmToken;
 		this.noteList = noteList;
 		this.userEventList = userEventList;
 		this.institutionList = institutionList;

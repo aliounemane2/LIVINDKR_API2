@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import net.minidev.json.JSONObject;
 import qualshore.livindkr.main.entities.Category;
 import qualshore.livindkr.main.entities.CustomUserDetails;
 import qualshore.livindkr.main.entities.Institution;
@@ -32,6 +36,8 @@ import qualshore.livindkr.main.repository.InstitutionRepository;
 import qualshore.livindkr.main.repository.MenuInstitutionRepository;
 import qualshore.livindkr.main.repository.MenuRepository;
 import qualshore.livindkr.main.repository.NotesRepository;
+import qualshore.livindkr.main.repository.UserRepository;
+import qualshore.livindkr.main.services.AndroidPushNotificationsService;
 import qualshore.livindkr.main.services.ImageStorageService;
 
 // @CrossOrigin(maxAge=3600)
@@ -64,7 +70,11 @@ public class InstitutionControllers {
 	@Autowired
 	private EventsRepository evRepository;
 	
-
+	@Autowired
+	private UserRepository usersReposi;
+	
+	@Autowired
+	AndroidPushNotificationsService androidPushNotificationsService;
 	
 	
 	@RequestMapping(value="/getInstitution/{idInstitution}", method = RequestMethod.GET)
@@ -159,6 +169,75 @@ public class InstitutionControllers {
 	}
 	
 	
+	
+	@RequestMapping(value="/institution_proximite/{idInstitution}", method = RequestMethod.POST)
+	public Map<String,Object> events_proximite(@PathVariable Integer idInstitution){
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		
+		if (idInstitution == null){
+			
+			h.put("message", "Push notification Non envoyee");
+			h.put("status", -1);
+			
+		}else {
+			
+
+			
+			Institution institutio = institutionrepository.findByIdInstitution(idInstitution);
+			
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+			User idUser;
+			idUser = customUserDetails;
+			
+				        
+			JSONObject body = new JSONObject();
+			body.put("to", ""+idUser.getFcmToken());
+			body.put("priority", "high");
+
+	 
+			JSONObject notification = new JSONObject();
+			notification.put("title", "Institution a proximite");
+			notification.put("body", ""+institutio.getNomIns());
+			
+			JSONObject data = new JSONObject();
+			data.put("Key-1", "JSA Data 1");
+			data.put("Key-2", "JSA Data 2");
+	 
+			body.put("notification", notification);
+			body.put("data", data);
+			
+			HttpEntity<String> request = new HttpEntity<>(body.toString());
+			// String ss="cQqCurDZIsE:APA91bELL0fiOHDph0MZsFm4Rtdkq9fRshn45KE5UXrSr2wV3A8FO2hVddAdhGwmHhz7zu8BcsUUxdenP7dYiHw98ZDpg7OdOb31alntB46lokNq99NbTG1YQVwcYmUzlkxqeZqyuEpc";
+			CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+			CompletableFuture.allOf(pushNotification).join();
+	 
+			try {
+				String firebaseResponse = pushNotification.get();
+				h.put("message", "CEST BON 1");
+				h.put("fcm", firebaseResponse);
+				h.put("status", 0);
+
+				return h;
+
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+	 
+			h.put("message", "CEST BON 2");
+			h.put("status", 2); 
+			
+			return h;
+
+			
+			
+		}
+		return h;
+	}
 	
 	@CrossOrigin
 	@RequestMapping(value="/delete_institution/{idInstitution}", method = RequestMethod.DELETE)
@@ -269,26 +348,25 @@ public class InstitutionControllers {
 
 	@RequestMapping(value="/saveInstitution/", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	//public Map<String,Object> saveInstitution(@RequestBody Institution institution, @RequestBody Menu menu, @RequestBody InstitutionMenu institutionMenu) {
-	public Map<String,Object> saveInstitution(@RequestBody Institution institution) {
+	public Map<String,Object> saveInstitution(@RequestBody Institution institution, @RequestBody Menu menu, @RequestBody InstitutionMenu institutionMenu) {
+	// public Map<String,Object> saveInstitution(@RequestBody Institution institution) {
 	
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		String location = env.getProperty("root.location.load");
 		
+		// Le bon
 		User idUser;
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
-        // return "Hello livInDakr "+customUserDetails.getNom();
-        idUser = customUserDetails;
+        idUser = customUserDetails; 
         
-		/*if (menu == null) {
-			
-			h.put("message", "paramètres vides.");
-			h.put("status", -1);
-			return h;
-			
-		}else*/ 
+   
         
+       /* if (institutionrepository.isIn) {
+        	
+        }
+        */
+
         if (institution == null){
 			
 			h.put("message", "paramètres vides.");
@@ -296,17 +374,6 @@ public class InstitutionControllers {
 			return h;
 			
 		}else {
-			/*
-			if (menu != null) {
-				menuRepository.save(menu);
-				h.put("message", "L'enregistrement du menu est effective:");
-				h.put("menu", menu);
-				h.put("status", 0);
-				//return h;
-			}
-			*/
-			
-			
 			
 			if (institution!= null ) {
 				institution.setIdUser(idUser);
@@ -316,22 +383,18 @@ public class InstitutionControllers {
 				h.put("institution", institution);
 				h.put("urls", "http://"+location);
 				h.put("status", 0);
+				
+				List<User> use = usersReposi.findAll();
+				for (int i = 0; i < use.size(); i++) {
+					
+					System.out.println(" Boucle Boucle Boucle Boucle Boucle 11111");
+					System.out.println(use.get(i).getNom()+" - "+use.get(i).getPrenom());
+					System.out.println(institution.getNomIns());
+					System.out.println(" Boucle Boucle Boucle Boucle Boucle 22222");
+				
+				}
 				//return h;
 			}
-			/*
-			if (institutionMenu != null) {
-				institutionMenu.setIdMenu(institutionMenu.getIdMenu());
-				institutionMenu.setIdInstitution(institutionMenu.getIdInstitution());
-				menuInstitutionRepository.save(institutionMenu);
-				//institutionrepository.save(institutionMenu);
-				h.put("message", "L'enregistrement de l'institution Menu est effective:");
-				h.put("menuInstitution", institutionMenu);
-				h.put("status", 0);
-				//return h;
-			}
-			*/
-
-			
 			return h;	
 		}
 		

@@ -101,7 +101,7 @@ public class InscriptionController {
           return new MessageResult("1", SecurityConstant.EREREUR_EMAIL);
         }
         */
-        return new MessageResult("2",SecurityConstant.INSCRIPTIONMSM);
+        return new MessageResult("2",""+user.getActivationToken()+"-"+SecurityConstant.INSCRIPTIONMSM);
     }
 
     @PostMapping("/ConfirmationEmail")

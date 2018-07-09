@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +31,7 @@ import qualshore.livindkr.main.entities.InterestsEvents;
 import qualshore.livindkr.main.entities.User;
 import qualshore.livindkr.main.repository.EventsRepository;
 import qualshore.livindkr.main.repository.InterestsEventsRepository;
+import qualshore.livindkr.main.services.AndroidPushNotificationsService;
 import qualshore.livindkr.main.services.ImageStorageService;
 
 @RequestMapping("/event")
@@ -36,6 +40,8 @@ public class EventControllers {
 	
 	@Autowired
 	private EventsRepository eventsrepository;
+	
+
 	
 	
 	
@@ -47,6 +53,9 @@ public class EventControllers {
 	
 	@Autowired
 	Environment env;
+	
+	@Autowired
+	AndroidPushNotificationsService androidPushNotificationsService;
 	
 	
 	@RequestMapping(value="/events_by_user/", method=RequestMethod.GET)
@@ -83,7 +92,7 @@ public class EventControllers {
 	
 	
 	@RequestMapping(value="/events_by_user_after/", method=RequestMethod.GET)
-	public HashMap<String, Object> getAllEventsByUserOrder( ){
+	public HashMap<String, Object> getAllEventsByUserOrder(){
 		
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -170,6 +179,94 @@ public class EventControllers {
 
 	}
 	
+	
+	@RequestMapping(value="/evenements_proximite/{idEvent}", method = RequestMethod.POST)
+	public Map<String,Object> events_proximite(@PathVariable Integer idEvent) throws JSONException{
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		
+		if (idEvent == null){
+			
+			h.put("message", "Push notification Non envoyee");
+			h.put("status", -1);
+			
+		}else {
+			
+
+			
+			Event eventss = eventsrepository.findOne(idEvent);
+			
+			User idUser;
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+	        idUser = customUserDetails; 
+	        
+			JSONObject body = new JSONObject();
+			body.put("to", ""+idUser.getFcmToken());
+			body.put("priority", "high");
+
+	 
+			JSONObject notification = new JSONObject();
+			notification.put("title", "Evenement a proximite");
+			notification.put("body", ""+eventss.getNomEvent());
+			
+			JSONObject data = new JSONObject();
+			data.put("Key-1", "JSA Data 1");
+			data.put("Key-2", "JSA Data 2");
+	 
+			body.put("notification", notification);
+			body.put("data", data);
+			
+			HttpEntity<String> request = new HttpEntity<>(body.toString());
+			// String ss="cQqCurDZIsE:APA91bELL0fiOHDph0MZsFm4Rtdkq9fRshn45KE5UXrSr2wV3A8FO2hVddAdhGwmHhz7zu8BcsUUxdenP7dYiHw98ZDpg7OdOb31alntB46lokNq99NbTG1YQVwcYmUzlkxqeZqyuEpc";
+			CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+			CompletableFuture.allOf(pushNotification).join();
+	 
+			try {
+				String firebaseResponse = pushNotification.get();
+				h.put("message", "CEST BON 1");
+				h.put("fcm", firebaseResponse);
+				h.put("status", 0);
+
+				return h;
+
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+	 
+			h.put("message", "CEST BON 2");
+			h.put("status", 2); 
+			
+			return h;
+
+			
+			
+		}
+		return h;
+	}
+	
+	
+	
+	
+	@RequestMapping(value="/events_proximite/{idEvent1}/{idEvent}", method = RequestMethod.POST)
+	public Map<String,Object> events_proximite(@PathVariable Integer idEvent1, @PathVariable Integer idEvent){
+		HashMap<String, Object> h = new HashMap<String, Object>();
+		
+		if ((idEvent1 == null) || (idEvent == null)){
+			
+			h.put("message", "Push notification Non envoyee");
+			h.put("status", -1);
+			
+		}else {
+			
+			h.put("message", "Push notification envoyee");
+			h.put("status", 0);
+			
+		}
+		return h;
+	}
 	
 	@RequestMapping(value="/delete_event/{idEvent}", method = RequestMethod.DELETE)
 	public Map<String,Object> delete_Event(@PathVariable Integer idEvent) {
@@ -284,24 +381,29 @@ public class EventControllers {
 			// intEvent.setIdEvent(evenements);
 			// intEvent.setIdInterest(evenements.geti);
 
-			
+			Integer hhh = evenements.getInterestsEventsList().get(0).getIdInterestsEvents();
 			
 			
 			h.put("message", "L'enregistrement des evenements est effective.");
 			h.put("evenements", evenements);
+						
+			
 			// h.put("EventsInterests", interestsEvents);
+			
 			h.put("status", 0);
+
 			return h;
 			
 		}
 	}
+	
+	
 	
 
 	@RequestMapping(value="/upload/", method = RequestMethod.POST)
 	public HashMap<String, Object> uploadEvent(MultipartHttpServletRequest requests) throws IOException {
 		HashMap<String, Object> h = new HashMap<String, Object>();
 		
-		// JSONObject item = new JSONObject();
         
 
 
